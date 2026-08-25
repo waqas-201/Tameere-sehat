@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to verify admin status
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == 'admin@tameersehat.pk' ||
+        request.auth.token.email == 'waqasvu892@gmail.com' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // Helper for owner checks
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // User profiles collection
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if isOwner(userId) || isAdmin() || (request.auth != null && request.auth.uid == userId);
+    }
+
+    // Products collection: Anyone can read product catalog, admins can create/update/delete
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Categories collection: Anyone can read, admins manage
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Orders collection: Anyone can create (guests or patients), users can read own orders, admins can read/write all
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // Prescriptions collection: Anyone can upload/request quotes, admins manage
+    match /prescriptions/{prescriptionId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // Consultations collection: Anyone can book, admins manage
+    match /consultations/{consultationId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+  }
+}

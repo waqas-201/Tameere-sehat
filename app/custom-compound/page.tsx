@@ -160,7 +160,9 @@ export default function CustomCompoundPage() {
         </h1>
 
         <p className="text-xs sm:text-sm text-stone-600 max-w-xl mx-auto leading-relaxed">
-          Formulate your own bespoke Majun, Safoof, or Arq. Select your base medium and combine up to 6 wildcrafted medicinal herbs. Compounded fresh upon order at our Karachi laboratory.
+          {language === 'ur'
+            ? 'اپنی ضرورت کے مطابق خالص یونانی معجون، سفوف یا مقطر عرق تیار کروائیں۔ بنیادی میڈیم منتخب کریں اور 6 تک نایاب جڑی بوٹیاں شامل کریں۔ کراچی لیبارٹری میں تازہ تیاری۔'
+            : 'Formulate your own bespoke Majun, Safoof, or Arq. Select your base medium and combine up to 6 wildcrafted medicinal herbs. Compounded fresh upon order at our Karachi laboratory.'}
         </p>
       </div>
 
@@ -173,13 +175,13 @@ export default function CustomCompoundPage() {
           {/* Step 1: Formulation Name */}
           <div className="space-y-2">
             <label className="font-serif font-bold text-sm text-stone-900 block">
-              1. Name Your Formulation:
+              {language === 'ur' ? '1۔ اپنے تیار کردہ نسخے کا نام درج کریں:' : '1. Name Your Formulation:'}
             </label>
             <input
               type="text"
               value={customFormulaName}
               onChange={(e) => setCustomFormulaName(e.target.value)}
-              placeholder="e.g. My Personal Joint & Vitality Blend"
+              placeholder={language === 'ur' ? 'مثال: ذاتی مقوی اعصاب و مصفیٰ نسخہ' : 'e.g. My Personal Joint & Vitality Blend'}
               className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs sm:text-sm font-semibold outline-none focus:border-[#199b50]"
             />
           </div>
@@ -187,7 +189,7 @@ export default function CustomCompoundPage() {
           {/* Step 2: Select Base Medium */}
           <div className="space-y-3 pt-4 border-t border-stone-100">
             <label className="font-serif font-bold text-sm text-stone-900 block">
-              2. Select Botanical Base Medium:
+              {language === 'ur' ? '2۔ بنیادی قوام یا ذریعہ منتخب کریں:' : '2. Select Botanical Base Medium:'}
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {BASE_FORMULATIONS.map((base) => (
@@ -195,15 +197,19 @@ export default function CustomCompoundPage() {
                   key={base.id}
                   type="button"
                   onClick={() => setSelectedBase(base)}
-                  className={`p-3.5 rounded-2xl text-left border transition-all ${
+                  className={`p-3.5 rounded-2xl ${language === 'ur' ? 'text-right' : 'text-left'} border transition-all ${
                     selectedBase.id === base.id
                       ? 'bg-emerald-50 border-[#199b50] text-[#155e42] ring-2 ring-[#199b50]/20'
                       : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
                   }`}
                 >
                   <div className="text-xl mb-1">{base.icon}</div>
-                  <div className="font-bold text-xs">{base.nameEn}</div>
-                  <div className="text-[11px] text-stone-500">{base.nameUr}</div>
+                  <div className="font-bold text-xs">
+                    {language === 'ur' ? base.nameUr : base.nameEn}
+                  </div>
+                  <div className="text-[11px] text-stone-500">
+                    {language === 'ur' ? base.nameEn : base.nameUr}
+                  </div>
                 </button>
               ))}
             </div>
@@ -213,10 +219,10 @@ export default function CustomCompoundPage() {
           <div className="space-y-3 pt-4 border-t border-stone-100">
             <div className="flex items-center justify-between">
               <label className="font-serif font-bold text-sm text-stone-900 block">
-                3. Choose Medicinal Herbs (Select 2 to 6):
+                {language === 'ur' ? '3۔ طبی جڑی بوٹیاں منتخب کریں (2 تا 6 منتخب کریں):' : '3. Choose Medicinal Herbs (Select 2 to 6):'}
               </label>
               <span className="text-xs font-bold text-[#199b50]">
-                {selectedHerbs.length} of 6 selected
+                {language === 'ur' ? `${selectedHerbs.length} میں سے 6 منتخب` : `${selectedHerbs.length} of 6 selected`}
               </span>
             </div>
 
@@ -228,15 +234,19 @@ export default function CustomCompoundPage() {
                     key={herb.id}
                     type="button"
                     onClick={() => toggleHerb(herb.id)}
-                    className={`p-3 rounded-xl text-left border transition-all flex items-center justify-between ${
+                    className={`p-3 rounded-xl ${language === 'ur' ? 'text-right' : 'text-left'} border transition-all flex items-center justify-between ${
                       isSelected
                         ? 'bg-emerald-50/90 border-[#199b50] text-[#155e42] font-semibold'
                         : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
                     }`}
                   >
                     <div>
-                      <div className="text-xs font-bold text-stone-900">{herb.nameEn}</div>
-                      <div className="text-[11px] text-[#199b50]">{herb.nameUr} • <span className="text-stone-400 font-normal">{herb.action}</span></div>
+                      <div className="text-xs font-bold text-stone-900">
+                        {language === 'ur' ? herb.nameUr : herb.nameEn}
+                      </div>
+                      <div className="text-[11px] text-[#199b50]">
+                        {language === 'ur' ? herb.nameEn : herb.nameUr} • <span className="text-stone-400 font-normal">{herb.action}</span>
+                      </div>
                     </div>
                     <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
                       isSelected ? 'bg-[#199b50] border-[#199b50] text-white' : 'border-stone-300'
@@ -252,7 +262,7 @@ export default function CustomCompoundPage() {
           {/* Step 4: Batch Weight */}
           <div className="space-y-3 pt-4 border-t border-stone-100">
             <label className="font-serif font-bold text-sm text-stone-900 block">
-              4. Select Total Formulation Quantity:
+              {language === 'ur' ? '4۔ کل وزن یا مقدار کا انتخاب:' : '4. Select Total Formulation Quantity:'}
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               {WEIGHTS.map((w, idx) => (
@@ -266,7 +276,9 @@ export default function CustomCompoundPage() {
                       : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
                   }`}
                 >
-                  {w.label}
+                  {language === 'ur' 
+                    ? (w.weightGrams === 100 ? '100 گرام کمپیکٹ بیج' : w.weightGrams === 250 ? '250 گرام معیاری کورس' : '500 گرام مکمل کورس')
+                    : w.label}
                 </button>
               ))}
             </div>
@@ -282,36 +294,38 @@ export default function CustomCompoundPage() {
             <div className="flex items-center justify-between pb-4 border-b border-emerald-900">
               <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4" />
-                <span>Compounding Ledger</span>
+                <span>{language === 'ur' ? 'نسخہ جاتی خلاصہ' : 'Compounding Ledger'}</span>
               </span>
               <span className="text-xs bg-emerald-950 text-emerald-300 px-2.5 py-0.5 rounded-full font-mono">
-                Fresh Batch
+                {language === 'ur' ? 'تازہ تیاری' : 'Fresh Batch'}
               </span>
             </div>
 
             <div className="space-y-3">
               <h3 className="font-serif text-xl font-bold text-white">
-                {customFormulaName || 'Custom Formulation'}
+                {customFormulaName || (language === 'ur' ? 'ذاتی مرکب' : 'Custom Formulation')}
               </h3>
               <div className="text-xs text-stone-300 flex items-center gap-2">
-                <span>Base: <strong className="text-white">{selectedBase.nameEn}</strong></span>
+                <span>{language === 'ur' ? 'بنیاد:' : 'Base:'} <strong className="text-white">{language === 'ur' ? selectedBase.nameUr : selectedBase.nameEn}</strong></span>
                 <span>•</span>
-                <span>Batch: <strong className="text-white">{selectedWeight.label}</strong></span>
+                <span>{language === 'ur' ? 'مقدار:' : 'Batch:'} <strong className="text-white">{selectedWeight.weightGrams} {language === 'ur' ? 'گرام' : 'g'}</strong></span>
               </div>
             </div>
 
             {/* Selected Botanicals Checklist */}
             <div className="space-y-2 pt-2 border-t border-emerald-900">
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 block">
-                Active Botanical Ingredients:
+                {language === 'ur' ? 'شامل شدہ خالص جڑی بوٹیاں:' : 'Active Botanical Ingredients:'}
               </span>
               <div className="space-y-1 text-xs text-stone-200">
                 {selectedHerbs.map((id) => {
                   const herb = AVAILABLE_HERBS.find(h => h.id === id);
                   return (
                     <div key={id} className="flex items-center justify-between bg-emerald-950/60 px-2.5 py-1.5 rounded-lg border border-emerald-900/60">
-                      <span>{herb?.nameEn} ({herb?.nameUr})</span>
-                      <span className="text-emerald-400 font-mono text-[10px]">Active</span>
+                      <span>{language === 'ur' ? herb?.nameUr : `${herb?.nameEn} (${herb?.nameUr})`}</span>
+                      <span className="text-emerald-400 font-mono text-[10px]">
+                        {language === 'ur' ? 'شامل ہے' : 'Active'}
+                      </span>
                     </div>
                   );
                 })}
@@ -321,13 +335,17 @@ export default function CustomCompoundPage() {
             {/* Pricing Calculation */}
             <div className="pt-4 border-t border-emerald-900 space-y-2">
               <div className="flex items-baseline justify-between">
-                <span className="text-xs text-stone-400">Total Compounding Estimate:</span>
+                <span className="text-xs text-stone-400">
+                  {language === 'ur' ? 'کل تخمینہ قیمت:' : 'Total Compounding Estimate:'}
+                </span>
                 <span className="text-3xl font-black text-emerald-400 font-serif">
-                  Rs. {totalPrice.toLocaleString()}
+                  {language === 'ur' ? `روپے ${totalPrice.toLocaleString()}` : `Rs. ${totalPrice.toLocaleString()}`}
                 </span>
               </div>
               <p className="text-[11px] text-stone-400">
-                Includes pharmaceutical laboratory grinding, sterile glass amber jar packaging, and quality certification.
+                {language === 'ur'
+                  ? 'اس میں خالص نباتاتی اجزاء کی کوٹائی، چھانٹی، اور طبی معیار کے امبر گلاس جار میں پیکنگ شامل ہے۔'
+                  : 'Includes pharmaceutical laboratory grinding, sterile glass amber jar packaging, and quality certification.'}
               </p>
             </div>
 
@@ -338,7 +356,7 @@ export default function CustomCompoundPage() {
                 className="w-full py-3.5 px-4 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all"
               >
                 <ShoppingBag className="w-4 h-4" />
-                <span>Add Custom Formula to Bag</span>
+                <span>{language === 'ur' ? 'شاپنگ بیگ میں شامل کریں' : 'Add Custom Formula to Bag'}</span>
               </button>
 
               <a
@@ -348,7 +366,7 @@ export default function CustomCompoundPage() {
                 className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-2 border border-white/20 transition-all"
               >
                 <MessageSquare className="w-4 h-4 text-emerald-400" />
-                <span>Submit to Hakeem on WhatsApp</span>
+                <span>{language === 'ur' ? 'حکیم صاحب کو واٹس ایپ پر ارسال کریں' : 'Submit to Hakeem on WhatsApp'}</span>
               </a>
             </div>
 
@@ -356,7 +374,11 @@ export default function CustomCompoundPage() {
 
           <div className="p-4 rounded-2xl bg-white border border-stone-200 flex items-center gap-3 text-xs text-stone-600 shadow-2xs">
             <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>Every custom batch is inspected by Hakim Muhammad Tariq before sealing and courier dispatch.</span>
+            <span>
+              {language === 'ur'
+                ? 'ہر ذاتی نسخہ ترسیل سے قبل حکیم طارق محمود کی ذاتی نگرانی میں تیار کیا جاتا ہے۔'
+                : 'Every custom batch is inspected by Hakim Muhammad Tariq before sealing and courier dispatch.'}
+            </span>
           </div>
 
         </div>

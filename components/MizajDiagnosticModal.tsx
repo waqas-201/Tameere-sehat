@@ -6,19 +6,11 @@ import {
   Stethoscope, 
   Sparkles, 
   CheckCircle2, 
-  ArrowRight, 
   RotateCcw, 
-  MessageSquare, 
-  ShoppingBag, 
-  Flame, 
-  Droplet, 
-  Wind, 
-  Mountain,
-  Share2,
-  FileText
+  MessageSquare
 } from 'lucide-react';
 import { MIZAJ_QUESTIONS, MIZAJ_PROFILES, PRODUCTS, STORE_WHATSAPP } from '@/lib/data';
-import { Language, Product } from '@/lib/types';
+import { Language } from '@/lib/types';
 
 interface MizajDiagnosticModalProps {
   isOpen: boolean;
@@ -49,7 +41,6 @@ export default function MizajDiagnosticModal({
     if (currentStep < MIZAJ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Calculate results
       calculateMizaj(updated);
     }
   };
@@ -71,7 +62,6 @@ export default function MizajDiagnosticModal({
       }
     });
 
-    // Find highest
     let dominant: keyof typeof MIZAJ_PROFILES = 'Safrawi';
     let max = -1;
     (Object.keys(counts) as Array<keyof typeof MIZAJ_PROFILES>).forEach((key) => {
@@ -139,13 +129,13 @@ export default function MizajDiagnosticModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-emerald-100 overflow-hidden relative max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="bg-[#0e2a1f] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-900">
+        <div className="bg-[#0b2317] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/40">
+            <div className="w-10 h-10 rounded-xl bg-[#00873E] text-white flex items-center justify-center border border-white/20">
               <Stethoscope className="w-5 h-5" />
             </div>
             <div>
@@ -160,7 +150,7 @@ export default function MizajDiagnosticModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-emerald-100 transition-colors"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -174,13 +164,13 @@ export default function MizajDiagnosticModal({
             <div className="space-y-6">
               
               {/* Progress Indicator */}
-              <div className="flex items-center justify-between text-xs font-bold text-emerald-900 mb-2">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0b2317] mb-2">
                 <span>{language === 'ur' ? `سوال نمبر ${currentStep + 1} از ${MIZAJ_QUESTIONS.length}` : `Question ${currentStep + 1} of ${MIZAJ_QUESTIONS.length}`}</span>
-                <span>{Math.round(((currentStep + 1) / MIZAJ_QUESTIONS.length) * 100)}%</span>
+                <span className="text-[#00873E]">{Math.round(((currentStep + 1) / MIZAJ_QUESTIONS.length) * 100)}%</span>
               </div>
-              <div className="w-full bg-emerald-100 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                 <div 
-                  className="bg-amber-400 h-full rounded-full transition-all duration-300"
+                  className="bg-[#00873E] h-full rounded-full transition-all duration-300"
                   style={{ width: `${((currentStep + 1) / MIZAJ_QUESTIONS.length) * 100}%` }}
                 ></div>
               </div>
@@ -205,20 +195,20 @@ export default function MizajDiagnosticModal({
                       onClick={() => handleSelectOption(currentQ.id, option.value)}
                       className={`p-4 rounded-2xl border text-left transition-all flex items-start justify-between gap-3 ${
                         isSelected
-                          ? 'bg-emerald-900 text-white border-emerald-900 shadow-md ring-2 ring-amber-400'
-                          : 'bg-white hover:bg-emerald-50 text-slate-800 border-emerald-200/80 hover:border-emerald-400'
+                          ? 'bg-[#00873E] text-white border-[#00873E] shadow-md ring-2 ring-[#00873E]/30'
+                          : 'bg-white hover:bg-[#f0faf4] text-slate-800 border-slate-200 hover:border-[#00873E]'
                       }`}
                     >
                       <div>
                         <div className="font-semibold text-sm sm:text-base leading-snug">
                           {language === 'ur' ? option.textUr : option.textEn}
                         </div>
-                        <div className={`text-xs mt-1 ${isSelected ? 'text-emerald-200' : 'text-slate-500'}`}>
+                        <div className={`text-xs mt-1 ${isSelected ? 'text-emerald-100' : 'text-slate-500'}`}>
                           {language === 'ur' ? option.textEn : option.textUr}
                         </div>
                       </div>
                       <span className={`text-xs px-2.5 py-1 rounded-full font-bold shrink-0 ${
-                        isSelected ? 'bg-amber-400 text-slate-950' : 'bg-emerald-100 text-emerald-800'
+                        isSelected ? 'bg-white text-[#00873E]' : 'bg-slate-100 text-slate-800'
                       }`}>
                         {option.trait}
                       </span>
@@ -233,8 +223,8 @@ export default function MizajDiagnosticModal({
           {/* State 2: Analyzing Loader */}
           {isAnalyzing && (
             <div className="py-16 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full border-4 border-emerald-200 border-t-emerald-800 animate-spin mx-auto"></div>
-              <h3 className="text-lg font-bold text-emerald-950">
+              <div className="w-16 h-16 rounded-full border-4 border-emerald-100 border-t-[#00873E] animate-spin mx-auto"></div>
+              <h3 className="text-lg font-bold text-[#0b2317]">
                 {language === 'ur' ? 'حکیمی اصولوں کے مطابق آپ کے مزاج کا تجزیہ کیا جا رہا ہے...' : 'Analyzing humoral balance according to Unani Tibb...'}
               </h3>
               <p className="text-xs text-slate-500">
@@ -248,15 +238,15 @@ export default function MizajDiagnosticModal({
             <div className="space-y-6 animate-fadeIn">
               
               {/* Header Result Card */}
-              <div className="p-6 rounded-3xl bg-[#0e2a1f] text-white border border-emerald-900 relative overflow-hidden shadow-xl">
+              <div className="p-6 rounded-3xl bg-[#0b2317] text-white border border-emerald-950 relative overflow-hidden shadow-xl">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                  <CheckCircle2 className="w-4 h-4 text-[#00873E]" />
                   <span>{language === 'ur' ? 'تشخیص مکمل — آپ کا غالب مزاج' : 'Diagnosis Complete — Dominant Constitution'}</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-serif font-black text-white">
                   {language === 'ur' ? profile.titleUr : profile.titleEn}
                 </h3>
-                <p className="text-xs sm:text-sm text-emerald-100/90 mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-200 mt-3 leading-relaxed">
                   {language === 'ur' ? profile.summaryUr : profile.summaryEn}
                 </p>
               </div>
@@ -265,15 +255,15 @@ export default function MizajDiagnosticModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 {/* Favorable Foods */}
-                <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
-                  <h4 className="text-xs sm:text-sm font-bold text-emerald-900 mb-3 flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs">✓</span>
+                <div className="p-5 rounded-2xl bg-[#f0faf4] border border-[#b0e6c4]">
+                  <h4 className="text-xs sm:text-sm font-bold text-[#00873E] mb-3 flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-[#00873E] text-white flex items-center justify-center text-xs">✓</span>
                     <span>{language === 'ur' ? 'موافق غذائیں (روزانہ استعمال کریں):' : 'Favorable Foods (Daily Diet):'}</span>
                   </h4>
                   <ul className="space-y-1.5 text-xs text-slate-800">
                     {(language === 'ur' ? profile.favorableFoodsUrdu : profile.favorableFoods).map((food, idx) => (
                       <li key={idx} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00873E]"></span>
                         <span>{food}</span>
                       </li>
                     ))}
@@ -313,7 +303,7 @@ export default function MizajDiagnosticModal({
                         onClose();
                         onSelectProduct(prod.id);
                       }}
-                      className="p-3.5 rounded-2xl bg-white border border-emerald-200 hover:border-emerald-400 hover:shadow-md cursor-pointer transition-all flex items-center justify-between"
+                      className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-[#00873E] hover:shadow-md cursor-pointer transition-all flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <img
@@ -325,12 +315,12 @@ export default function MizajDiagnosticModal({
                           <h5 className="text-xs sm:text-sm font-bold text-slate-900">
                             {language === 'ur' ? prod.urduName : prod.name}
                           </h5>
-                          <span className="text-xs font-black text-emerald-800">
+                          <span className="text-xs font-black text-[#00873E]">
                             Rs. {prod.price.toLocaleString()}
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md font-bold">
+                      <span className="text-xs text-emerald-800 bg-[#f0faf4] border border-[#b0e6c4] px-2 py-1 rounded-md font-bold">
                         View
                       </span>
                     </div>
@@ -340,9 +330,9 @@ export default function MizajDiagnosticModal({
 
               {/* AI Deep Analysis Section */}
               {aiReport ? (
-                <div className="p-5 rounded-2xl bg-teal-50 border border-teal-200 space-y-2">
-                  <h4 className="text-xs sm:text-sm font-bold text-teal-950 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-teal-600" />
+                <div className="p-5 rounded-2xl bg-[#f0faf4] border border-[#b0e6c4] space-y-2">
+                  <h4 className="text-xs sm:text-sm font-bold text-[#00873E] flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#00873E]" />
                     <span>{language === 'ur' ? 'تفصیلی AI حکیمی تجزیہ و 7 روزہ پلان:' : 'In-Depth Hakeem AI Analysis & 7-Day Protocol:'}</span>
                   </h4>
                   <div className="text-xs text-slate-800 whitespace-pre-line leading-relaxed">
@@ -353,7 +343,7 @@ export default function MizajDiagnosticModal({
                 <button
                   onClick={handleGetAiDeepReport}
                   disabled={loadingAi}
-                  className="w-full py-3 px-4 rounded-xl bg-teal-800 hover:bg-teal-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                  className="w-full py-3 px-4 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
                   <span>
@@ -370,7 +360,7 @@ export default function MizajDiagnosticModal({
                   href={getWhatsAppShareText()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-colors"
+                  className="flex-1 py-3 px-4 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>{language === 'ur' ? 'یہ رپورٹ حکیم صاحب کو واٹس ایپ پر بھیجیں' : 'Send Report to Hakeem on WhatsApp'}</span>

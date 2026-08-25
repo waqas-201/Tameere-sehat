@@ -1,26 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { 
   Stethoscope, 
   MessageSquare, 
   Video, 
   Phone, 
   MapPin, 
-  Clock, 
-  Calendar, 
   ShieldCheck, 
   Check, 
-  User, 
-  Award, 
-  FileText, 
-  HelpCircle, 
-  Upload, 
-  Sparkles,
-  HeartPulse,
-  Send,
-  AlertCircle,
   ArrowRight,
   CheckCircle2
 } from 'lucide-react';
@@ -31,7 +19,6 @@ export default function ConsultationPage() {
   const { language } = useApp();
   const chiefHakeem = HAKEEMS[0];
 
-  const [step, setStep] = useState(1);
   const [consultationMode, setConsultationMode] = useState<'whatsapp-video' | 'whatsapp-audio' | 'phone' | 'in-clinic'>('whatsapp-audio');
   
   // Patient Form State
@@ -43,19 +30,31 @@ export default function ConsultationPage() {
   const [primaryIssue, setPrimaryIssue] = useState('');
   const [duration, setDuration] = useState('1 to 3 months');
   const [symptomsDetails, setSymptomsDetails] = useState('');
-  const [preferredDate, setPreferredDate] = useState('');
+  const [preferredDate] = useState('');
   const [preferredSlot, setPreferredSlot] = useState('Evening (5:00 PM – 8:00 PM)');
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
-  const symptomChecklist = [
-    'Stomach Gas & Acidity (تیزابیت / تبخیر)',
-    'Liver Heat & Jaundice (جگر کی گرمی)',
-    'Chronic Joint / Sciatica Pain (جوڑوں کا درد)',
-    'Vitality & Physical Weakness (کمزوری / اعصابی تناؤ)',
-    'Kidney Stone & Burning Urine (گردے کی پتھری)',
-    'Skin Eczema & Allergies (چنبل / خارش)',
-    'Hair Fall & Dandruff (بالوں کا گرنا)'
+  const symptomChecklistEn = [
+    'Stomach Gas & Acidity',
+    'Liver Heat & Jaundice',
+    'Chronic Joint / Sciatica Pain',
+    'Vitality & Physical Weakness',
+    'Kidney Stone & Burning Urine',
+    'Skin Eczema & Allergies',
+    'Hair Fall & Dandruff'
   ];
+
+  const symptomChecklistUr = [
+    'معدے کی گیس، جلن و تبخیر',
+    'جگر کی گرمی اور یرقان',
+    'جوڑوں کا درد، عرق النساء و کمر درد',
+    'اعصابی کمزوری اور جسمانی تھکن',
+    'گردے کی پتھری و پیشاب کی جلن',
+    'جلدی خارش، چنبل و الرجی',
+    'بالوں کا گرنا اور خشکی'
+  ];
+
+  const symptomChecklist = language === 'ur' ? symptomChecklistUr : symptomChecklistEn;
 
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
 
@@ -94,39 +93,39 @@ export default function ConsultationPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
       
       {/* Top Hero Banner */}
-      <div className="bg-[#0e2a1f] rounded-3xl p-8 sm:p-12 text-white shadow-md relative overflow-hidden border border-emerald-950">
+      <div className="bg-[#0b2317] rounded-3xl p-8 sm:p-12 text-white shadow-md relative overflow-hidden border border-emerald-950">
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           <div className="lg:col-span-8 space-y-4">
-            <span className="text-[11px] font-bold text-amber-300 uppercase tracking-widest bg-emerald-950/80 px-3.5 py-1 rounded-full border border-emerald-700/60 inline-flex items-center gap-1.5">
-              <Stethoscope className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{language === 'ur' ? 'آن لائن طبی کلینک و تشخیص' : 'Certified Tele-Tibb Clinic'}</span>
+            <span className="text-[11px] font-bold text-white uppercase tracking-widest bg-[#00873E] px-3.5 py-1 rounded-full border border-white/20 inline-flex items-center gap-1.5">
+              <Stethoscope className="w-3.5 h-3.5 text-white" />
+              <span>{language === 'ur' ? 'آن لائن طبی کلینک و معائنہ' : 'Certified Tele-Tibb Clinic'}</span>
             </span>
 
             <h1 className="font-serif text-3xl sm:text-5xl font-black leading-tight text-white">
               {language === 'ur' 
-                ? 'سینئر حکیم صاحب سے براہِ راست معائنہ اور درست تشخیص' 
+                ? 'سینئر اطباء سے براہِ راست مشورہ اور مستند علاج' 
                 : 'Direct Consultation with Senior Unani Hakims'}
             </h1>
 
-            <p className="text-stone-300 text-xs sm:text-base leading-relaxed max-w-2xl font-normal">
+            <p className="text-slate-200 text-xs sm:text-base leading-relaxed max-w-2xl font-normal">
               {language === 'ur'
-                ? 'اپنے مرض کی جڑ تک پہنچیں۔ ہمارے مستند حکماء نبض، زبان اور علامات کی روشنی میں آپ کے مزاج کا تعین کر کے 100% خالص نباتاتی ادویات تجویز کرتے ہیں۔'
+                ? 'اپنے مرض کی جڑ تک پہنچیں۔ ہمارے مستند اطباء نبض، زبان اور علامات کی روشنی میں آپ کے مزاج کا تعین کر کے خالص نباتاتی ادویات اور غذائی پرہیز نامہ تجویز کرتے ہیں۔'
                 : 'Discover the root cause of your ailment. Based on traditional pulse, tongue, and humor analysis (Dam, Balgham, Safra, Sawda), receive custom hand-compounded prescriptions dispatched across Pakistan.'}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2 text-xs text-emerald-200">
               <div className="flex items-center gap-1.5 font-semibold">
-                <Check className="w-4 h-4 text-amber-400" />
-                <span>100% Confidential</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>{language === 'ur' ? '100% مکمل راز داری' : '100% Confidential'}</span>
               </div>
               <div className="flex items-center gap-1.5 font-semibold">
-                <Check className="w-4 h-4 text-amber-400" />
-                <span>Audio, Video & WhatsApp</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>{language === 'ur' ? 'آڈیو، ویڈیو اور واٹس ایپ' : 'Audio, Video & WhatsApp'}</span>
               </div>
               <div className="flex items-center gap-1.5 font-semibold">
-                <Check className="w-4 h-4 text-amber-400" />
-                <span>Doorstep Medication Delivery</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>{language === 'ur' ? 'گھر کی دہلیز پر ادویات کی فراہمی' : 'Doorstep Medication Delivery'}</span>
               </div>
             </div>
           </div>
@@ -134,17 +133,25 @@ export default function ConsultationPage() {
           {/* Chief Hakeem Snapshot Badge */}
           <div className="lg:col-span-4 bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 text-white space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full bg-emerald-800 border-2 border-amber-400 flex items-center justify-center font-serif text-xl font-bold text-amber-300 shrink-0">
-                HT
+              <div className="w-14 h-14 rounded-full bg-[#00873E] border-2 border-white/40 flex items-center justify-center font-serif text-xl font-bold text-white shrink-0">
+                {language === 'ur' ? 'حکیم' : 'HT'}
               </div>
               <div>
-                <h3 className="font-serif font-bold text-base text-white">{chiefHakeem.name}</h3>
-                <p className="text-xs text-amber-300">{chiefHakeem.qualification}</p>
-                <p className="text-[11px] text-stone-300">{chiefHakeem.experienceYears}+ Years Clinical Practice</p>
+                <h3 className="font-serif font-bold text-base text-white">
+                  {language === 'ur' ? chiefHakeem.urduName : chiefHakeem.name}
+                </h3>
+                <p className="text-xs text-emerald-200">
+                  {language === 'ur' ? (chiefHakeem.qualificationUrdu || chiefHakeem.qualification) : chiefHakeem.qualification}
+                </p>
+                <p className="text-[11px] text-slate-300">
+                  {language === 'ur' ? `${chiefHakeem.experienceYears} سالہ کلینیکل تجربہ` : `${chiefHakeem.experienceYears}+ Years Clinical Practice`}
+                </p>
               </div>
             </div>
-            <p className="text-xs text-stone-200 leading-relaxed border-t border-white/10 pt-2">
-              National Council for Tibb Certified. Over 100,000 successful holistic treatments.
+            <p className="text-xs text-slate-200 leading-relaxed border-t border-white/10 pt-2">
+              {language === 'ur'
+                ? 'نیشنل کونسل فار طب سے منظور شدہ۔ ہزاروں مریضوں کا کامیاب اور قدرتی علاج۔'
+                : 'National Council for Tibb Certified. Over 100,000 successful holistic treatments.'}
             </p>
           </div>
 
@@ -152,39 +159,41 @@ export default function ConsultationPage() {
       </div>
 
       {/* Main Multi-Step Booking & Intake Panel */}
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200/90 shadow-sm max-w-4xl mx-auto space-y-8">
+      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm max-w-4xl mx-auto space-y-8">
         
         {bookingConfirmed ? (
           /* Confirmation State */
           <div className="text-center py-10 space-y-6 animate-in zoom-in duration-300">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 text-[#155e42] flex items-center justify-center mx-auto">
+            <div className="w-20 h-20 rounded-full bg-[#f0faf4] text-[#00873E] border border-[#b0e6c4] flex items-center justify-center mx-auto shadow-md">
               <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-bold text-[#199b50] uppercase tracking-widest">
-                Appointment Dossier Ready
+              <span className="text-xs font-bold text-[#00873E] uppercase tracking-widest">
+                {language === 'ur' ? 'طبی تفصیلات تیار ہیں' : 'Appointment Dossier Ready'}
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900">
                 {language === 'ur' ? 'آپ کی معلومات موصول ہو چکی ہیں!' : 'Your Consultation Request is Prepared!'}
               </h2>
-              <p className="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
-                Click below to send your medical dossier to Hakim Muhammad Tariq on WhatsApp for immediate priority scheduling.
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
+                {language === 'ur'
+                  ? 'فوری رابطہ اور وقت کے تعین کے لیے نیچے دیے گئے بٹن پر کلک کر کے واٹس ایپ پر حکیم صاحب کو تفصیلات بھیجیں۔'
+                  : 'Click below to send your medical dossier to Hakim Muhammad Tariq on WhatsApp for immediate priority scheduling.'}
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200 text-left max-w-md mx-auto space-y-2 text-xs">
-              <div className="flex justify-between text-stone-600">
-                <span>Patient:</span>
-                <strong className="text-stone-900">{fullName} ({age} yrs, {gender})</strong>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>{language === 'ur' ? 'مریض کا نام:' : 'Patient:'}</span>
+                <strong className="text-slate-900">{fullName} ({age} {language === 'ur' ? 'سال' : 'yrs'})</strong>
               </div>
-              <div className="flex justify-between text-stone-600">
-                <span>Mode:</span>
-                <strong className="text-stone-900 uppercase">{consultationMode}</strong>
+              <div className="flex justify-between text-slate-600">
+                <span>{language === 'ur' ? 'رابطہ کا ذریعہ:' : 'Mode:'}</span>
+                <strong className="text-slate-900 uppercase">{consultationMode}</strong>
               </div>
-              <div className="flex justify-between text-stone-600">
-                <span>Preferred Slot:</span>
-                <strong className="text-stone-900">{preferredSlot}</strong>
+              <div className="flex justify-between text-slate-600">
+                <span>{language === 'ur' ? 'پسندیدہ وقت:' : 'Preferred Slot:'}</span>
+                <strong className="text-slate-900">{preferredSlot}</strong>
               </div>
             </div>
 
@@ -193,17 +202,17 @@ export default function ConsultationPage() {
                 href={getWhatsAppDossierUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-102"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#00873E]/20 transition-all hover:scale-102"
               >
                 <MessageSquare className="w-5 h-5" />
-                <span>Open WhatsApp & Confirm with Hakeem</span>
+                <span>{language === 'ur' ? 'واٹس ایپ پر حکیم صاحب سے تصدیق کریں' : 'Open WhatsApp & Confirm with Hakeem'}</span>
               </a>
 
               <button
                 onClick={() => setBookingConfirmed(false)}
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-xs"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs"
               >
-                Edit Dossier
+                {language === 'ur' ? 'معلومات درست کریں' : 'Edit Dossier'}
               </button>
             </div>
           </div>
@@ -213,8 +222,8 @@ export default function ConsultationPage() {
             
             {/* Step 1: Select Mode */}
             <div className="space-y-3">
-              <label className="font-serif font-bold text-base text-stone-900 block">
-                1. Select Preferred Consultation Mode
+              <label className="font-serif font-bold text-base text-slate-900 block">
+                {language === 'ur' ? '1. رابطے کا پسندیدہ طریقہ منتخب کریں' : '1. Select Preferred Consultation Mode'}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                 
@@ -223,13 +232,17 @@ export default function ConsultationPage() {
                   onClick={() => setConsultationMode('whatsapp-audio')}
                   className={`p-4 rounded-2xl border text-left transition-all ${
                     consultationMode === 'whatsapp-audio'
-                      ? 'bg-emerald-50 border-[#199b50] text-[#155e42] ring-2 ring-[#199b50]/20'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] ring-2 ring-[#00873E]/20'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <MessageSquare className="w-5 h-5 mb-2 text-[#199b50]" />
-                  <div className="font-bold text-xs">WhatsApp Audio</div>
-                  <div className="text-[11px] text-stone-500">Voice call & notes</div>
+                  <MessageSquare className="w-5 h-5 mb-2 text-[#00873E]" />
+                  <div className="font-bold text-xs">
+                    {language === 'ur' ? 'واٹس ایپ وائس کال' : 'WhatsApp Audio'}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    {language === 'ur' ? 'صوتی گفتگو و وائس نوٹس' : 'Voice call & notes'}
+                  </div>
                 </button>
 
                 <button
@@ -237,13 +250,17 @@ export default function ConsultationPage() {
                   onClick={() => setConsultationMode('whatsapp-video')}
                   className={`p-4 rounded-2xl border text-left transition-all ${
                     consultationMode === 'whatsapp-video'
-                      ? 'bg-emerald-50 border-[#199b50] text-[#155e42] ring-2 ring-[#199b50]/20'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] ring-2 ring-[#00873E]/20'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <Video className="w-5 h-5 mb-2 text-[#199b50]" />
-                  <div className="font-bold text-xs">Video Call</div>
-                  <div className="text-[11px] text-stone-500">Visual tongue/skin exam</div>
+                  <Video className="w-5 h-5 mb-2 text-[#00873E]" />
+                  <div className="font-bold text-xs">
+                    {language === 'ur' ? 'ویڈیو کال' : 'Video Call'}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    {language === 'ur' ? 'زبان و چہرے کا تصویری معائنہ' : 'Visual tongue/skin exam'}
+                  </div>
                 </button>
 
                 <button
@@ -251,13 +268,17 @@ export default function ConsultationPage() {
                   onClick={() => setConsultationMode('phone')}
                   className={`p-4 rounded-2xl border text-left transition-all ${
                     consultationMode === 'phone'
-                      ? 'bg-emerald-50 border-[#199b50] text-[#155e42] ring-2 ring-[#199b50]/20'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] ring-2 ring-[#00873E]/20'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <Phone className="w-5 h-5 mb-2 text-[#199b50]" />
-                  <div className="font-bold text-xs">Standard Direct Call</div>
-                  <div className="text-[11px] text-stone-500">Cellular call</div>
+                  <Phone className="w-5 h-5 mb-2 text-[#00873E]" />
+                  <div className="font-bold text-xs">
+                    {language === 'ur' ? 'فون کال' : 'Standard Direct Call'}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    {language === 'ur' ? 'موبائل سم کال' : 'Cellular call'}
+                  </div>
                 </button>
 
                 <button
@@ -265,55 +286,65 @@ export default function ConsultationPage() {
                   onClick={() => setConsultationMode('in-clinic')}
                   className={`p-4 rounded-2xl border text-left transition-all ${
                     consultationMode === 'in-clinic'
-                      ? 'bg-emerald-50 border-[#199b50] text-[#155e42] ring-2 ring-[#199b50]/20'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] ring-2 ring-[#00873E]/20'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <MapPin className="w-5 h-5 mb-2 text-[#199b50]" />
-                  <div className="font-bold text-xs">Karachi Clinic</div>
-                  <div className="text-[11px] text-stone-500">Korangi Dispensary</div>
+                  <MapPin className="w-5 h-5 mb-2 text-[#00873E]" />
+                  <div className="font-bold text-xs">
+                    {language === 'ur' ? 'کراچی دواخانہ آمد' : 'Karachi Clinic'}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    {language === 'ur' ? 'نبض شناسی و بالمشافہ ملاقات' : 'Korangi Dispensary'}
+                  </div>
                 </button>
 
               </div>
             </div>
 
             {/* Step 2: Patient Demographics */}
-            <div className="space-y-4 pt-4 border-t border-stone-100">
-              <label className="font-serif font-bold text-base text-stone-900 block">
-                2. Patient Particulars
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <label className="font-serif font-bold text-base text-slate-900 block">
+                {language === 'ur' ? '2. مریض کی بنیادی تفصیلات' : '2. Patient Particulars'}
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">Full Name *</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'پورا نام *' : 'Full Name *'}
+                  </label>
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. Muhammad Usman"
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    placeholder={language === 'ur' ? 'مثلاً: محمد عثمان' : 'e.g. Muhammad Usman'}
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">WhatsApp Phone Number *</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'واٹس ایپ یا فون نمبر *' : 'WhatsApp Phone Number *'}
+                  </label>
                   <input
                     type="tel"
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="03XX-XXXXXXX"
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    placeholder="0300-1234567"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">City *</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'شہر *' : 'City *'}
+                  </label>
                   <select
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   >
                     {PAKISTAN_CITIES.map(c => (
                       <option key={c} value={c}>{c}</option>
@@ -322,50 +353,56 @@ export default function ConsultationPage() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">Age (Years) *</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'عمر (سالوں میں) *' : 'Age (Years) *'}
+                  </label>
                   <input
                     type="number"
                     required
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    placeholder="e.g. 35"
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    placeholder="35"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">Gender *</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'جنس *' : 'Gender *'}
+                  </label>
                   <select
                     value={gender}
                     onChange={(e: any) => setGender(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   >
-                    <option value="male">Male (مرد)</option>
-                    <option value="female">Female (خاتون)</option>
-                    <option value="other">Other</option>
+                    <option value="male">{language === 'ur' ? 'مرد' : 'Male'}</option>
+                    <option value="female">{language === 'ur' ? 'خاتون' : 'Female'}</option>
+                    <option value="other">{language === 'ur' ? 'دیگر' : 'Other'}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="font-semibold text-stone-700 block mb-1">How Long Have You Had This Issue?</label>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    {language === 'ur' ? 'مرض کتنا پرانا ہے؟' : 'How Long Have You Had This Issue?'}
+                  </label>
                   <select
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-[#199b50]"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:border-[#00873E]"
                   >
-                    <option value="Few days / acute">Few days (تازہ عارضہ)</option>
-                    <option value="1 to 3 months">1 to 3 months</option>
-                    <option value="6 months to 1 year">6 months to 1 year</option>
-                    <option value="More than 2 years (chronic)">More than 2 years (پرانا مرض)</option>
+                    <option value="Few days / acute">{language === 'ur' ? 'چند دن (تازہ عارضہ)' : 'Few days'}</option>
+                    <option value="1 to 3 months">{language === 'ur' ? '1 سے 3 ماہ' : '1 to 3 months'}</option>
+                    <option value="6 months to 1 year">{language === 'ur' ? '6 ماہ سے 1 سال' : '6 months to 1 year'}</option>
+                    <option value="More than 2 years (chronic)">{language === 'ur' ? '2 سال سے زیادہ (پرانا مرض)' : 'More than 2 years'}</option>
                   </select>
                 </div>
               </div>
             </div>
 
             {/* Step 3: Symptom Checklist & Medical Intake */}
-            <div className="space-y-4 pt-4 border-t border-stone-100">
-              <label className="font-serif font-bold text-base text-stone-900 block">
-                3. Primary Health Issues & Symptoms
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <label className="font-serif font-bold text-base text-slate-900 block">
+                {language === 'ur' ? '3. اہم علامات و تکالیف منتخب کریں' : '3. Primary Health Issues & Symptoms'}
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
@@ -378,68 +415,86 @@ export default function ConsultationPage() {
                       onClick={() => toggleSymptom(sym)}
                       className={`p-3 rounded-xl text-left text-xs transition-all border flex items-center justify-between ${
                         isChecked
-                          ? 'bg-emerald-50 border-[#199b50] text-[#155e42] font-bold'
-                          : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                          ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] font-bold'
+                          : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       <span>{sym}</span>
-                      {isChecked && <Check className="w-4 h-4 text-[#199b50]" />}
+                      {isChecked && <Check className="w-4 h-4 text-[#00873E]" />}
                     </button>
                   );
                 })}
               </div>
 
               <div className="pt-2">
-                <label className="font-semibold text-xs text-stone-700 block mb-1">
-                  Describe Any Additional Symptoms, Past Reports, or Diet Details:
+                <label className="font-semibold text-xs text-slate-700 block mb-1">
+                  {language === 'ur' 
+                    ? 'مزید علامات، سابقہ ادویات یا غذا کی تفصیلات لکھیں:' 
+                    : 'Describe Any Additional Symptoms, Past Reports, or Diet Details:'}
                 </label>
                 <textarea
                   value={symptomsDetails}
                   onChange={(e) => setSymptomsDetails(e.target.value)}
                   rows={3}
-                  placeholder="e.g. Constipation, burning in feet at night, blood pressure status, or previous treatments taken..."
-                  className="w-full p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs outline-none focus:border-[#199b50]"
+                  placeholder={
+                    language === 'ur'
+                      ? 'مثلاً: قبض، رات کو پاؤں میں جلن، بلڈ پریشر یا پہلے استعمال شدہ ادویات...'
+                      : 'e.g. Constipation, burning in feet at night, blood pressure status, or previous treatments taken...'
+                  }
+                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs outline-none focus:border-[#00873E]"
                 />
               </div>
             </div>
 
             {/* Step 4: Slot Picker */}
-            <div className="space-y-4 pt-4 border-t border-stone-100">
-              <label className="font-serif font-bold text-base text-stone-900 block">
-                4. Select Preferred Timing Slot
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <label className="font-serif font-bold text-base text-slate-900 block">
+                {language === 'ur' ? '4. رابطے کے لیے مناسب وقت کا انتخاب' : '4. Select Preferred Timing Slot'}
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                {['Morning (11:00 AM – 2:00 PM)', 'Evening (5:00 PM – 8:00 PM)', 'Night (8:30 PM – 10:30 PM)'].map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    onClick={() => setPreferredSlot(slot)}
-                    className={`p-3.5 rounded-xl text-center border font-semibold transition-all ${
-                      preferredSlot === slot
-                        ? 'bg-[#0e2a1f] text-white border-[#0e2a1f]'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
+                {[
+                  { en: 'Morning (11:00 AM – 2:00 PM)', ur: 'صبح (11:00 تا 2:00 بجے)' },
+                  { en: 'Evening (5:00 PM – 8:00 PM)', ur: 'شام (5:00 تا 8:00 بجے)' },
+                  { en: 'Night (8:30 PM – 10:30 PM)', ur: 'رات (8:30 تا 10:30 بجے)' }
+                ].map((slot) => {
+                  const label = language === 'ur' ? slot.ur : slot.en;
+                  const isSelected = preferredSlot === slot.en || preferredSlot === slot.ur;
+                  return (
+                    <button
+                      key={slot.en}
+                      type="button"
+                      onClick={() => setPreferredSlot(language === 'ur' ? slot.ur : slot.en)}
+                      className={`p-3.5 rounded-xl text-center border font-semibold transition-all ${
+                        isSelected
+                          ? 'bg-[#00873E] text-white border-[#00873E] shadow-sm'
+                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="pt-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-xs text-stone-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>Zero consultation fee for standard telephonic & WhatsApp triage</span>
+            <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-[#00873E]" />
+                <span>
+                  {language === 'ur' 
+                    ? 'ابتدائی آن لائن و واٹس ایپ مشورے کی کوئی فیس نہیں ہے' 
+                    : 'Zero consultation fee for standard telephonic & WhatsApp triage'}
+                </span>
               </div>
 
               <button
                 type="submit"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-102"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#00873E]/20 transition-all hover:scale-102"
               >
-                <span>Proceed to Appointment Confirmation</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>{language === 'ur' ? 'وقت کی تصدیق کے لیے آگے بڑھیں' : 'Proceed to Appointment Confirmation'}</span>
+                <ArrowRight className={`w-4 h-4 ${language === 'ur' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
@@ -449,28 +504,35 @@ export default function ConsultationPage() {
       </div>
 
       {/* Physical Dispensary Clinic Info */}
-      <div className="bg-stone-900 text-white rounded-3xl p-8 sm:p-10 border border-stone-800">
+      <div className="bg-[#0b2317] text-white rounded-3xl p-8 sm:p-10 border border-emerald-950">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-lg text-amber-400">Karachi Central Dispensary</h3>
-            <p className="text-xs text-stone-300 leading-relaxed">
+            <h3 className="font-serif font-bold text-lg text-emerald-300">
+              {language === 'ur' ? 'کراچی مرکزی دواخانہ و کلینک' : 'Karachi Central Dispensary'}
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               {language === 'ur' ? STORE_ADDRESS_UR : STORE_ADDRESS_EN}
             </p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-lg text-emerald-400">Walk-in Consultation Hours</h3>
-            <p className="text-xs text-stone-300 leading-relaxed">
-              Monday – Saturday: 10:00 AM – 10:00 PM<br />
-              Sunday: 11:00 AM – 8:00 PM
+            <h3 className="font-serif font-bold text-lg text-[#00873E]">
+              {language === 'ur' ? 'ملاقات و کلینک کے اوقات' : 'Walk-in Consultation Hours'}
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              {language === 'ur' 
+                ? 'پیر تا ہفتہ: صبح 10:00 تا رات 10:00\nاتوار: صبح 11:00 تا شام 8:00' 
+                : 'Monday – Saturday: 10:00 AM – 10:00 PM\nSunday: 11:00 AM – 8:00 PM'}
             </p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="font-serif font-bold text-lg text-white">Direct Clinical Line</h3>
-            <p className="text-xs text-stone-300 font-mono">
-              Phone: {STORE_PHONE}<br />
-              WhatsApp: +{STORE_WHATSAPP}
+            <h3 className="font-serif font-bold text-lg text-white">
+              {language === 'ur' ? 'براہِ راست طبی ہیلپ لائن' : 'Direct Clinical Line'}
+            </h3>
+            <p className="text-xs text-slate-300 font-mono">
+              {language === 'ur' ? 'فون نمبر:' : 'Phone:'} {STORE_PHONE}<br />
+              {language === 'ur' ? 'واٹس ایپ:' : 'WhatsApp:'} +{STORE_WHATSAPP}
             </p>
           </div>
         </div>

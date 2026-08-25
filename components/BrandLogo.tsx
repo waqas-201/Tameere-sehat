@@ -4,90 +4,187 @@ import React from 'react';
 
 interface BrandLogoProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'dark' | 'light' | 'emerald';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'badge' | 'lockup' | 'light' | 'icon-only';
+  showSubtitle?: boolean;
 }
 
+/**
+ * Tameer-e-Sehat Official Brand Logo
+ * Styled directly from the authentic original logo:
+ * - Signature Primary Green: #00873E
+ * - Crisp White Leaf & Typography: #FFFFFF
+ * - Iconic rounded pill container with inner white border
+ */
 export default function BrandLogo({ 
   className = '', 
   size = 'md',
-  variant = 'dark' 
+  variant = 'badge',
+  showSubtitle = true
 }: BrandLogoProps) {
-  const isLight = variant === 'light';
-
-  // Responsive sizing configurations
-  const iconSizeClasses = {
-    sm: 'w-7 h-7 sm:w-8 sm:h-8 rounded-lg',
-    md: 'w-9 h-9 sm:w-10 sm:h-10 rounded-xl',
-    lg: 'w-11 h-11 sm:w-12 sm:h-12 rounded-2xl'
+  // Dimension maps based on size
+  const badgeDimensions = {
+    sm: { width: 140, height: 46, fontSize1: 17, fontSize2: 15 },
+    md: { width: 180, height: 60, fontSize1: 22, fontSize2: 19 },
+    lg: { width: 220, height: 74, fontSize1: 27, fontSize2: 24 },
+    xl: { width: 280, height: 94, fontSize1: 34, fontSize2: 30 },
   }[size];
 
-  const svgSizeClasses = {
-    sm: 'w-4 h-4 sm:w-4.5 sm:h-4.5',
-    md: 'w-5 h-5 sm:w-5.5 sm:h-5.5',
-    lg: 'w-6 h-6 sm:w-7 sm:h-7'
+  const iconSizes = {
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-12 h-12',
+    xl: 'w-16 h-16'
   }[size];
 
-  const titleSizeClasses = {
-    sm: 'text-xs sm:text-sm md:text-base font-extrabold tracking-tight whitespace-nowrap',
-    md: 'text-sm sm:text-base md:text-lg font-extrabold tracking-tight whitespace-nowrap',
-    lg: 'text-base sm:text-xl md:text-2xl font-black tracking-tight whitespace-nowrap'
-  }[size];
+  if (variant === 'icon-only') {
+    return (
+      <div 
+        dir="ltr"
+        style={{ direction: 'ltr' }}
+        className={`inline-flex items-center justify-center rounded-2xl bg-[#00873E] p-1.5 shadow-sm border border-emerald-600/30 shrink-0 flex-none ${className}`}
+      >
+        <svg 
+          viewBox="0 0 40 40" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full text-white shrink-0"
+          style={{ direction: 'ltr' }}
+        >
+          {/* Inner rounded border */}
+          <rect x="2" y="2" width="36" height="36" rx="8" stroke="white" strokeWidth="1.5" strokeOpacity="0.9" fill="none" />
+          {/* Stylized authentic leaf */}
+          <path 
+            d="M9 29C9 29 11 13 29 9C29 9 34 22 22 29C15 33 9 29 9 29Z" 
+            fill="white"
+          />
+          {/* Leaf inner cutout vein */}
+          <path 
+            d="M10 28C17 23 24 18 28 10" 
+            stroke="#00873E" 
+            strokeWidth="2.2" 
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+    );
+  }
 
+  // Full Authentic Badge Mode (Exact Match to uploaded logo)
   return (
-    <div className={`inline-flex items-center gap-2 sm:gap-2.5 select-none shrink-0 min-w-0 ${className}`}>
-      {/* Botanical Emblem Icon */}
-      <div className="relative flex items-center justify-center shrink-0">
-        <div className={`${iconSizeClasses} bg-[#155e42] text-white flex items-center justify-center shadow-xs border border-emerald-700/40 group-hover:bg-[#0e2a1f] transition-colors shrink-0`}>
-          {/* Stylized Botanical Leaf + Mortar Motif */}
-          <svg 
-            viewBox="0 0 32 32" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-            className={`${svgSizeClasses} text-white shrink-0`}
-          >
+    <div 
+      dir="ltr" 
+      style={{ direction: 'ltr', minWidth: `${badgeDimensions.width}px` }}
+      className={`inline-flex flex-col select-none shrink-0 flex-none ${className}`}
+    >
+      <div 
+        dir="ltr"
+        style={{ direction: 'ltr' }}
+        className="relative group transition-transform duration-200 hover:scale-[1.02] inline-block shrink-0 flex-none"
+      >
+        <svg
+          width={badgeDimensions.width}
+          height={badgeDimensions.height}
+          viewBox="0 0 240 80"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="drop-shadow-sm block shrink-0 flex-none"
+          style={{ 
+            direction: 'ltr',
+            width: `${badgeDimensions.width}px`, 
+            height: `${badgeDimensions.height}px`,
+            minWidth: `${badgeDimensions.width}px`,
+            minHeight: `${badgeDimensions.height}px`,
+            aspectRatio: '240 / 80'
+          }}
+        >
+          {/* Outer Rounded Container with Primary Green #00873E */}
+          <rect 
+            x="1" 
+            y="1" 
+            width="238" 
+            height="78" 
+            rx="18" 
+            fill="#00873E" 
+            stroke="#007335" 
+            strokeWidth="1.5"
+          />
+          
+          {/* Inner Rounded White Border */}
+          <rect 
+            x="5.5" 
+            y="5.5" 
+            width="229" 
+            height="69" 
+            rx="14" 
+            stroke="#FFFFFF" 
+            strokeWidth="2.2" 
+            strokeOpacity="0.95"
+            fill="none"
+          />
+
+          {/* Left Leaf Botanical Motif (Matching Original Logo) */}
+          <g transform="translate(14, 15)">
+            {/* Solid Leaf Silhouette */}
             <path 
-              d="M7 23C7 23 9 11 23 8C23 8 28 17 19 23C13 28 7 23 7 23Z" 
-              fill="currentColor"
-              fillOpacity="0.95"
+              d="M3 48C3 48 5 18 36 9C36 9 43 33 24 48C13 56 3 48 3 48Z" 
+              fill="#FFFFFF"
             />
+            {/* Primary Green Vein cutout */}
             <path 
-              d="M9 22C14 18 20 14 23 8" 
-              stroke="#bbf7d0" 
-              strokeWidth="2" 
+              d="M5 47C15 39 27 28 35 11" 
+              stroke="#00873E" 
+              strokeWidth="2.8" 
               strokeLinecap="round"
             />
-            <path 
-              d="M5 28C8 25.5 10 23 11 20.5" 
-              stroke="#fef08a" 
-              strokeWidth="2" 
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+          </g>
 
-        {/* Small gold sparkle accent */}
-        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 border border-white shrink-0" />
+          {/* Typography: Tameer (Line 1) & -e- Sehat (Line 2) */}
+          <g fill="#FFFFFF" style={{ direction: 'ltr', unicodeBidi: 'embed' }}>
+            {/* Tameer */}
+            <text
+              x="62"
+              y="37"
+              textAnchor="start"
+              direction="ltr"
+              unicodeBidi="embed"
+              fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, 'Arial Rounded MT Bold', sans-serif"
+              fontWeight="900"
+              fontSize="29"
+              letterSpacing="0.5"
+              fill="#FFFFFF"
+            >
+              Tameer
+            </text>
+
+            {/* -e- Sehat */}
+            <text
+              x="60"
+              y="67"
+              textAnchor="start"
+              direction="ltr"
+              unicodeBidi="embed"
+              fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, 'Arial Rounded MT Bold', sans-serif"
+              fontWeight="900"
+              fontSize="28"
+              letterSpacing="0.2"
+              fill="#FFFFFF"
+            >
+              -e- Sehat
+            </text>
+          </g>
+        </svg>
       </div>
 
-      {/* Brand Typography */}
-      <div className="flex flex-col text-left justify-center min-w-0 shrink-0">
-        <div className="flex items-center leading-none">
-          <span className={`font-serif ${titleSizeClasses} ${isLight ? 'text-white' : 'text-stone-900'}`}>
-            TAMEER<span className="text-[#199b50] font-sans font-black">-E-</span>SEHAT
-          </span>
-        </div>
-        
-        {size === 'sm' ? (
-          <span className={`hidden sm:block text-[9px] font-semibold tracking-wider uppercase mt-0.5 whitespace-nowrap truncate ${isLight ? 'text-emerald-200/90' : 'text-stone-500'}`}>
-            Apothecary • Est. 1990
-          </span>
-        ) : (
-          <span className={`text-[9px] sm:text-[10px] font-medium tracking-wider uppercase mt-0.5 whitespace-nowrap truncate ${isLight ? 'text-emerald-200/90' : 'text-stone-500'}`}>
-            Botanical Apothecary • Est. 1990
-          </span>
-        )}
-      </div>
+      {showSubtitle && size !== 'sm' && (
+        <span 
+          dir="ltr"
+          style={{ direction: 'ltr' }}
+          className="text-[9px] font-semibold tracking-wider text-slate-500 uppercase mt-0.5 text-center hidden sm:block"
+        >
+          Apothecary • Est. 1990
+        </span>
+      )}
     </div>
   );
 }

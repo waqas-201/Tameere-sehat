@@ -6,10 +6,7 @@ import {
   CheckCircle2, 
   Truck, 
   CreditCard, 
-  Phone, 
   MapPin, 
-  MessageSquare, 
-  ShieldCheck, 
   ArrowRight,
   Copy,
   Check
@@ -134,13 +131,13 @@ export default function CheckoutModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-emerald-100 overflow-hidden relative max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative max-h-[92vh] flex flex-col">
         
         {/* Header */}
-        <div className="bg-[#0e2a1f] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-900">
+        <div className="bg-[#0b2317] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/40">
+            <div className="w-10 h-10 rounded-xl bg-[#00873E] text-white flex items-center justify-center border border-white/20">
               <Truck className="w-5 h-5" />
             </div>
             <div>
@@ -155,7 +152,7 @@ export default function CheckoutModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-emerald-100 transition-colors"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -167,12 +164,12 @@ export default function CheckoutModal({
           {confirmedOrder ? (
             /* Order Success View */
             <div className="py-6 space-y-6 text-center animate-fadeIn">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-inner">
+              <div className="w-16 h-16 rounded-full bg-[#f0faf4] text-[#00873E] border border-[#b0e6c4] flex items-center justify-center mx-auto shadow-inner">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
 
               <div>
-                <span className="text-xs font-bold text-amber-700 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#00873E] uppercase tracking-wider">
                   {language === 'ur' ? 'آرڈر کامیابی سے درج ہو گیا!' : 'Order Placed Successfully!'}
                 </span>
                 <h3 className="text-2xl font-serif font-bold text-slate-900 mt-1">
@@ -184,13 +181,13 @@ export default function CheckoutModal({
               </div>
 
               {/* Tracking & Courier Info Box */}
-              <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left max-w-md mx-auto space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-emerald-950 pb-2 border-b border-emerald-200">
+              <div className="p-5 rounded-2xl bg-[#f0faf4] border border-[#b0e6c4] text-left max-w-md mx-auto space-y-3">
+                <div className="flex items-center justify-between text-xs font-bold text-[#0b2317] pb-2 border-b border-[#b0e6c4]">
                   <span className="flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-emerald-700" />
+                    <Truck className="w-4 h-4 text-[#00873E]" />
                     <span>Courier: TCS Express</span>
                   </span>
-                  <span className="text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md text-[11px]">
+                  <span className="text-[#00873E] bg-white border border-[#b0e6c4] px-2 py-0.5 rounded-md text-[11px] font-bold">
                     Expected: 24-48 Hours
                   </span>
                 </div>
@@ -205,15 +202,15 @@ export default function CheckoutModal({
                       onClick={() => handleCopyTracking(confirmedOrder.trackingNumber)}
                       className="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs flex items-center gap-1"
                     >
-                      {copiedTracking ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedTracking ? <Check className="w-3.5 h-3.5 text-[#00873E]" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copiedTracking ? 'Copied!' : 'Copy'}</span>
                     </button>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-emerald-200 text-xs flex justify-between">
+                <div className="pt-2 border-t border-[#b0e6c4] text-xs flex justify-between">
                   <span className="text-slate-600">Total Payable upon Delivery:</span>
-                  <span className="font-bold text-emerald-900 text-sm">
+                  <span className="font-bold text-[#00873E] text-sm">
                     Rs. {confirmedOrder.total.toLocaleString()}
                   </span>
                 </div>
@@ -222,7 +219,7 @@ export default function CheckoutModal({
               <div className="pt-4 flex flex-wrap justify-center gap-3">
                 <button
                   onClick={onClose}
-                  className="px-6 py-2.5 rounded-full bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm shadow-md transition-colors"
+                  className="px-6 py-2.5 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm shadow-md transition-colors"
                 >
                   {language === 'ur' ? 'شاپنگ جاری رکھیں' : 'Continue Shopping'}
                 </button>
@@ -236,7 +233,7 @@ export default function CheckoutModal({
               {/* Delivery Address Details */}
               <div>
                 <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-emerald-700" />
+                  <MapPin className="w-4 h-4 text-[#00873E]" />
                   <span>{language === 'ur' ? 'ڈلیوری کا پتہ اور کسٹمر معلومات:' : '1. Delivery Address & Customer Information:'}</span>
                 </h3>
 
@@ -251,7 +248,7 @@ export default function CheckoutModal({
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Asad Ullah Khan"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                     />
                   </div>
 
@@ -265,7 +262,7 @@ export default function CheckoutModal({
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="0300-1234567"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                     />
                   </div>
                 </div>
@@ -278,7 +275,7 @@ export default function CheckoutModal({
                     <select
                       value={formData.city}
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none bg-white"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none bg-white"
                     >
                       {PAKISTAN_CITIES.map((c, idx) => (
                         <option key={idx} value={c}>{c}</option>
@@ -295,7 +292,7 @@ export default function CheckoutModal({
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="name@gmail.com"
-                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                      className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                     />
                   </div>
                 </div>
@@ -310,7 +307,7 @@ export default function CheckoutModal({
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     placeholder="e.g. House # 42, Street 8, Block 4, Clifton, near PSO Pump"
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   />
                 </div>
               </div>
@@ -318,7 +315,7 @@ export default function CheckoutModal({
               {/* Payment Methods */}
               <div>
                 <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-emerald-700" />
+                  <CreditCard className="w-4 h-4 text-[#00873E]" />
                   <span>{language === 'ur' ? 'ادائیگی کا طریقہ منتخب کریں:' : '2. Select Payment Method:'}</span>
                 </h3>
 
@@ -329,17 +326,17 @@ export default function CheckoutModal({
                     onClick={() => setPaymentMethod('cod')}
                     className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       paymentMethod === 'cod'
-                        ? 'bg-emerald-900 text-white border-emerald-900 shadow-md ring-2 ring-amber-400'
+                        ? 'bg-[#f0faf4] border-[#00873E] ring-1 ring-[#00873E]'
                         : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-xs sm:text-sm">💵 Cash on Delivery (COD)</div>
-                      <div className={`text-[11px] mt-0.5 ${paymentMethod === 'cod' ? 'text-emerald-200' : 'text-slate-500'}`}>
+                      <div className="font-bold text-xs sm:text-sm text-slate-900">💵 Cash on Delivery (COD)</div>
+                      <div className="text-[11px] mt-0.5 text-slate-500">
                         Pay cash when parcel arrives at your doorstep
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold bg-[#00873E] text-white px-2 py-0.5 rounded-full">
                       Most Popular
                     </span>
                   </div>
@@ -349,13 +346,13 @@ export default function CheckoutModal({
                     onClick={() => setPaymentMethod('jazzcash')}
                     className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       paymentMethod === 'jazzcash'
-                        ? 'bg-emerald-900 text-white border-emerald-900 shadow-md ring-2 ring-amber-400'
+                        ? 'bg-[#f0faf4] border-[#00873E] ring-1 ring-[#00873E]'
                         : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-xs sm:text-sm">📱 JazzCash / EasyPaisa</div>
-                      <div className={`text-[11px] mt-0.5 ${paymentMethod === 'jazzcash' ? 'text-emerald-200' : 'text-slate-500'}`}>
+                      <div className="font-bold text-xs sm:text-sm text-slate-900">📱 JazzCash / EasyPaisa</div>
+                      <div className="text-[11px] mt-0.5 text-slate-500">
                         Direct mobile wallet transfer
                       </div>
                     </div>
@@ -366,13 +363,13 @@ export default function CheckoutModal({
                     onClick={() => setPaymentMethod('bank_transfer')}
                     className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       paymentMethod === 'bank_transfer'
-                        ? 'bg-emerald-900 text-white border-emerald-900 shadow-md ring-2 ring-amber-400'
+                        ? 'bg-[#f0faf4] border-[#00873E] ring-1 ring-[#00873E]'
                         : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-xs sm:text-sm">🏦 Online Bank Transfer</div>
-                      <div className={`text-[11px] mt-0.5 ${paymentMethod === 'bank_transfer' ? 'text-emerald-200' : 'text-slate-500'}`}>
+                      <div className="font-bold text-xs sm:text-sm text-slate-900">🏦 Online Bank Transfer</div>
+                      <div className="text-[11px] mt-0.5 text-slate-500">
                         Meezan / HBL / Alfalah accounts
                       </div>
                     </div>
@@ -389,20 +386,20 @@ export default function CheckoutModal({
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>Shipping Fee:</span>
-                  <span className={`font-bold ${isFreeShipping ? 'text-emerald-700' : 'text-slate-900'}`}>
+                  <span className={`font-bold ${isFreeShipping ? 'text-[#00873E]' : 'text-slate-900'}`}>
                     {isFreeShipping ? 'FREE' : `Rs. ${STANDARD_SHIPPING_FEE}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-200">
                   <span>Total Amount:</span>
-                  <span className="text-emerald-950 font-serif text-base">Rs. {total.toLocaleString()}</span>
+                  <span className="text-[#00873E] font-serif text-base">Rs. {total.toLocaleString()}</span>
                 </div>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full py-4 px-6 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
+                className="w-full py-4 px-6 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
               >
                 <span>{language === 'ur' ? 'آرڈر کنفرم کریں (Confirm Order)' : 'Confirm Order & Generate Tracking Slip'}</span>
                 <ArrowRight className="w-4 h-4" />

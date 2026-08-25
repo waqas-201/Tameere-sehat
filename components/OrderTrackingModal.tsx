@@ -5,15 +5,10 @@ import {
   X, 
   Search, 
   Truck, 
-  CheckCircle2, 
-  Clock, 
-  MapPin, 
-  Package, 
-  PhoneCall, 
   MessageSquare 
 } from 'lucide-react';
 import { Language } from '@/lib/types';
-import { STORE_WHATSAPP, STORE_PHONE } from '@/lib/data';
+import { STORE_WHATSAPP } from '@/lib/data';
 
 interface OrderTrackingModalProps {
   isOpen: boolean;
@@ -43,7 +38,6 @@ export default function OrderTrackingModal({
     e.preventDefault();
     if (!trackingInput.trim()) return;
 
-    // Simulated authentic tracking response
     setTrackedData({
       orderId: `TS-${Math.floor(100000 + Math.random() * 900000)}`,
       trackingNumber: trackingInput.toUpperCase(),
@@ -61,13 +55,13 @@ export default function OrderTrackingModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-emerald-100 overflow-hidden relative">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative">
         
         {/* Header */}
-        <div className="bg-[#0e2a1f] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-900">
+        <div className="bg-[#0b2317] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/40">
+            <div className="w-10 h-10 rounded-xl bg-[#00873E] text-white flex items-center justify-center border border-white/20">
               <Truck className="w-5 h-5" />
             </div>
             <div>
@@ -82,7 +76,7 @@ export default function OrderTrackingModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-emerald-100 transition-colors"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -98,14 +92,14 @@ export default function OrderTrackingModal({
                 value={trackingInput}
                 onChange={(e) => setTrackingInput(e.target.value)}
                 placeholder="Enter TCS Tracking # or Order ID (e.g. TCS-7482910-PK)"
-                className="w-full text-xs sm:text-sm pl-9 pr-3 py-3 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                className="w-full text-xs sm:text-sm pl-9 pr-3 py-3 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
             </div>
 
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm shadow-md transition-colors"
+              className="px-6 py-3 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm shadow-md transition-colors"
             >
               {language === 'ur' ? 'ٹریک کریں' : 'Track'}
             </button>
@@ -113,13 +107,13 @@ export default function OrderTrackingModal({
 
           {/* Tracked Results View */}
           {trackedData && (
-            <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-5 animate-fadeIn">
+            <div className="p-5 rounded-2xl bg-[#f0faf4] border border-[#b0e6c4] space-y-5 animate-fadeIn">
               
               {/* Header Status */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-200">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#b0e6c4]">
                 <div>
                   <span className="text-[11px] text-slate-500 block">Status:</span>
-                  <span className="text-sm font-black text-emerald-950">{trackedData.status}</span>
+                  <span className="text-sm font-black text-[#0b2317]">{trackedData.status}</span>
                 </div>
                 <div className="text-right">
                   <span className="text-[11px] text-slate-500 block">Courier:</span>
@@ -128,17 +122,17 @@ export default function OrderTrackingModal({
               </div>
 
               {/* Progress Steps Timeline */}
-              <div className="space-y-4 relative pl-6 border-l-2 border-emerald-300 ml-2">
+              <div className="space-y-4 relative pl-6 border-l-2 border-[#00873E] ml-2">
                 {trackedData.steps.map((step, idx) => (
                   <div key={idx} className="relative">
                     <div
                       className={`absolute -left-[31px] top-0 w-4 h-4 rounded-full border-2 ${
                         step.completed
-                          ? 'bg-emerald-600 border-emerald-600'
+                          ? 'bg-[#00873E] border-[#00873E]'
                           : 'bg-white border-slate-300'
                       }`}
                     ></div>
-                    <h4 className={`text-xs font-bold ${step.current ? 'text-emerald-900 font-black' : 'text-slate-800'}`}>
+                    <h4 className={`text-xs font-bold ${step.current ? 'text-[#00873E] font-black' : 'text-slate-800'}`}>
                       {step.title}
                     </h4>
                     <p className="text-[11px] text-slate-500">{step.time}</p>
@@ -147,9 +141,9 @@ export default function OrderTrackingModal({
               </div>
 
               {/* Estimated Delivery */}
-              <div className="p-3 bg-white rounded-xl border border-emerald-200 flex items-center justify-between text-xs">
+              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-xs">
                 <span className="text-slate-600">Estimated Delivery:</span>
-                <span className="font-black text-emerald-900">{trackedData.estimatedDelivery}</span>
+                <span className="font-black text-[#00873E]">{trackedData.estimatedDelivery}</span>
               </div>
 
             </div>
@@ -165,7 +159,7 @@ export default function OrderTrackingModal({
               href={`https://wa.me/${STORE_WHATSAPP}?text=Assalam-o-Alaikum%20Tameer-e-Sehat,%20please%20update%20me%20on%20my%20order%20status.`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1"
+              className="px-3.5 py-2 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp</span>

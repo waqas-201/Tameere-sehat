@@ -6,12 +6,11 @@ import {
   FileText, 
   UploadCloud, 
   CheckCircle2, 
-  MessageSquare, 
   ShieldCheck, 
   Clock, 
   Send 
 } from 'lucide-react';
-import { STORE_WHATSAPP, STORE_PHONE } from '@/lib/data';
+import { STORE_WHATSAPP } from '@/lib/data';
 import { Language } from '@/lib/types';
 
 interface PrescriptionUploadModalProps {
@@ -61,13 +60,13 @@ export default function PrescriptionUploadModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-emerald-100 overflow-hidden relative">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative">
         
         {/* Header */}
-        <div className="bg-[#0e2a1f] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-900">
+        <div className="bg-[#0b2317] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/40">
+            <div className="w-10 h-10 rounded-xl bg-[#00873E] text-white flex items-center justify-center border border-white/20">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -82,7 +81,7 @@ export default function PrescriptionUploadModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-emerald-100 transition-colors"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -91,7 +90,7 @@ export default function PrescriptionUploadModal({
         <div className="p-6 sm:p-8">
           {isSubmitted ? (
             <div className="py-10 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-full bg-[#f0faf4] text-[#00873E] border border-[#b0e6c4] flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-serif font-bold text-slate-900">
@@ -104,7 +103,7 @@ export default function PrescriptionUploadModal({
               </p>
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-full bg-emerald-900 text-white text-xs font-bold hover:bg-emerald-800 transition-colors"
+                className="px-6 py-2.5 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white text-xs font-bold transition-colors"
               >
                 {language === 'ur' ? 'بند کریں' : 'Done'}
               </button>
@@ -113,14 +112,14 @@ export default function PrescriptionUploadModal({
             <form onSubmit={handleSubmit} className="space-y-4">
               
               {/* Upload Dropzone */}
-              <div className="border-2 border-dashed border-emerald-300 hover:border-emerald-500 rounded-2xl p-6 text-center bg-emerald-50/40 hover:bg-emerald-50/80 transition-colors cursor-pointer relative">
+              <div className="border-2 border-dashed border-[#00873E]/40 hover:border-[#00873E] rounded-2xl p-6 text-center bg-[#f0faf4]/60 hover:bg-[#f0faf4] transition-colors cursor-pointer relative">
                 <input
                   type="file"
                   accept="image/*,.pdf"
                   onChange={handleFileChange}
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                 />
-                <UploadCloud className="w-10 h-10 text-emerald-700 mx-auto mb-2" />
+                <UploadCloud className="w-10 h-10 text-[#00873E] mx-auto mb-2" />
                 <p className="text-xs sm:text-sm font-bold text-slate-800">
                   {fileName ? `✓ Selected: ${fileName}` : (language === 'ur' ? 'نسخے کی تصویر یہاں کلک کر کے اپلوڈ کریں' : 'Click or Drag photo of prescription here')}
                 </p>
@@ -140,7 +139,7 @@ export default function PrescriptionUploadModal({
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="e.g. Tariq Mehmood"
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   />
                 </div>
 
@@ -154,7 +153,7 @@ export default function PrescriptionUploadModal({
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="0318-2311310"
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   />
                 </div>
               </div>
@@ -168,7 +167,7 @@ export default function PrescriptionUploadModal({
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   placeholder="e.g. Lahore, Karachi, Islamabad"
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                 />
               </div>
 
@@ -181,22 +180,22 @@ export default function PrescriptionUploadModal({
                   value={formData.instructions}
                   onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
                   placeholder={language === 'ur' ? 'مثلاً: جڑی بوٹیاں ثابت چاہیے یا پسی ہوئی...' : 'e.g. Need whole herbs or finely powdered...'}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none resize-none"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none resize-none"
                 />
               </div>
 
               {/* Submit CTA */}
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all"
+                className="w-full py-3.5 px-4 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all"
               >
-                <Send className="w-4 h-4 text-amber-300" />
+                <Send className="w-4 h-4 text-white" />
                 <span>{language === 'ur' ? 'نسخہ واٹس ایپ پر بھیجیں اور قیمت معلوم کریں' : 'Send Prescription & Get Instant Quote'}</span>
               </button>
 
               <div className="flex items-center justify-center gap-4 text-[11px] text-slate-500 pt-1">
                 <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> 100% Pure Herbs Guaranteed
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#00873E]" /> 100% Pure Herbs Guaranteed
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5 text-amber-600" /> 15-Min Response Time

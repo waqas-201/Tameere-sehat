@@ -38,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body suppressHydrationWarning className="bg-[#fdfcf8] text-[#1a2e1a] antialiased selection:bg-[#f59e0b] selection:text-[#1a2e1a] font-sans">
+      <body suppressHydrationWarning className="bg-[#f8faf9] text-[#0f172a] antialiased selection:bg-[#00873E] selection:text-white font-sans">
         <AuthProvider>
           <AppProvider>
             <ClientShell>

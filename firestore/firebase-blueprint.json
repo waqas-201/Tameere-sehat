@@ -1,0 +1,136 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profiles",
+      "description": "Registered patients, doctors, and store admins with role and contact profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user", "guest"] },
+        "phone": { "type": "string" },
+        "city": { "type": "string" },
+        "address": { "type": "string" },
+        "mizaj": { "type": "string" },
+        "avatar": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "email", "name", "role"]
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Patient orders placed with delivery address, items, and status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "city": { "type": "string" },
+        "address": { "type": "string" },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "shipping": { "type": "number" },
+        "total": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "status": { "type": "string" },
+        "orderNotes": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "customerName", "phone", "city", "items", "total", "status"]
+    },
+    "prescriptions": {
+      "title": "Prescription Uploads",
+      "description": "Nuskha prescriptions submitted by patients for Hakeem quotation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "patientName": { "type": "string" },
+        "phone": { "type": "string" },
+        "city": { "type": "string" },
+        "symptoms": { "type": "string" },
+        "notes": { "type": "string" },
+        "status": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "patientName", "phone", "status"]
+    },
+    "consultations": {
+      "title": "Hakeem Consultations",
+      "description": "Scheduled appointments with Dawakhana Hakims",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "patientName": { "type": "string" },
+        "phone": { "type": "string" },
+        "city": { "type": "string" },
+        "age": { "type": "number" },
+        "issue": { "type": "string" },
+        "mode": { "type": "string" },
+        "scheduledTime": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "patientName", "phone", "status"]
+    },
+    "products": {
+      "title": "Herbal E-Commerce Products",
+      "description": "Tibb formulations, packaging varieties, pricing, and ingredients",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "urduName": { "type": "string" },
+        "category": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "categoryNameUrdu": { "type": "string" },
+        "shortDesc": { "type": "string" },
+        "shortDescUrdu": { "type": "string" },
+        "description": { "type": "string" },
+        "descriptionUrdu": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "image": { "type": "string" },
+        "badge": { "type": "string" },
+        "benefits": { "type": "array" },
+        "benefitsUrdu": { "type": "array" },
+        "ingredients": { "type": "array" },
+        "ingredientsUrdu": { "type": "array" },
+        "dosage": { "type": "string" },
+        "dosageUrdu": { "type": "string" },
+        "mizaj": { "type": "string" },
+        "mizajUrdu": { "type": "string" },
+        "variants": { "type": "array" },
+        "targetConcerns": { "type": "array" },
+        "inStock": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "urduName", "category", "price", "image", "variants", "inStock"]
+    },
+    "categories": {
+      "title": "Product Categories",
+      "description": "Product category groupings for Tibb apothecaries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "nameUr": { "type": "string" },
+        "icon": { "type": "string" },
+        "description": { "type": "string" },
+        "descriptionUrdu": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "nameEn", "nameUr"]
+    }
+  }
+}

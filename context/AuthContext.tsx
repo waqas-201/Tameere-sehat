@@ -1,10 +1,29 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { 
+  User as FirebaseUser,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signInAnonymously,
+  signOut,
+  updateProfile as updateFirebaseProfile,
+  onAuthStateChanged
+} from 'firebase/auth';
+import { 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  serverTimestamp 
+} from 'firebase/firestore';
+import { auth, googleProvider, db } from '@/lib/firebase';
 import { AuthUser, UserRole } from '@/lib/auth-types';
 
 interface AuthContextType {
   user: AuthUser | null;
+  firebaseUser: FirebaseUser | null;
   token: string | null;
   role: UserRole | null;
   isAuthenticated: boolean;
@@ -12,12 +31,12 @@ interface AuthContextType {
   isGuest: boolean;
   isLoading: boolean;
   
-  // Auth Operations
+  // Real Firebase Auth Operations
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   register: (name: string, email: string, password: string, phone?: string, city?: string) => Promise<{ success: boolean; message?: string }>;
-  loginWithGoogle: (customData?: { name: string; email: string; avatar?: string }) => Promise<{ success: boolean; message?: string }>;
+  loginWithGoogle: () => Promise<{ success: boolean; message?: string }>;
   continueAsGuest: () => Promise<{ success: boolean; message?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateProfile: (data: Partial<AuthUser>) => Promise<{ success: boolean; message?: string }>;
   
   // Auth Modal State
@@ -25,122 +44,160 @@ interface AuthContextType {
   authModalTab: 'login' | 'register' | 'guest';
   openAuthModal: (tab?: 'login' | 'register' | 'guest') => void;
   closeAuthModal: () => void;
-  
-  // Google Popup Simulator State
-  isGooglePopupOpen: boolean;
-  openGooglePopup: () => void;
-  closeGooglePopup: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Admin email list
+const ADMIN_EMAILS = [
+  'admin@tameersehat.pk',
+  'waqasvu892@gmail.com'
+];
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('tameer_user_data');
-        if (saved) return JSON.parse(saved);
-      } catch {}
-    }
-    return null;
-  });
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return localStorage.getItem('tameer_jwt_token');
-      } catch {}
-    }
-    return null;
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Client hydration for cached user profile
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('tameer_firebase_user');
+      if (saved) {
+        setUser(JSON.parse(saved));
+      }
+    } catch {}
+  }, []);
   
   // Modals
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalTab, setAuthModalTab] = useState<'login' | 'register' | 'guest'>('login');
-  const [isGooglePopupOpen, setIsGooglePopupOpen] = useState<boolean>(false);
 
-  // Synchronize Token to localStorage & Cookie
-  const saveAuthSession = (newToken: string, newUser: AuthUser) => {
-    setToken(newToken);
-    setUser(newUser);
+  // Helper to fetch or create user document in Firestore
+  const syncUserDoc = async (fbUser: FirebaseUser, extraData?: { name?: string; phone?: string; city?: string }) => {
     try {
-      localStorage.setItem('tameer_jwt_token', newToken);
-      localStorage.setItem('tameer_user_data', JSON.stringify(newUser));
-      document.cookie = `tameer_jwt_token=${newToken}; path=/; max-age=604800; SameSite=Lax`;
-    } catch (e) {
-      console.error('Failed to save auth session:', e);
+      const userDocRef = doc(db, 'users', fbUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      const email = fbUser.email?.toLowerCase() || `guest_${fbUser.uid.slice(0, 6)}@tameersehat.pk`;
+      const isUserAdmin = ADMIN_EMAILS.includes(email);
+      const isAnon = fbUser.isAnonymous;
+      const role: UserRole = isUserAdmin ? 'admin' : isAnon ? 'guest' : 'user';
+      
+      let profile: AuthUser;
+
+      if (userDocSnap.exists()) {
+        const existingData = userDocSnap.data();
+        profile = {
+          id: fbUser.uid,
+          name: existingData.name || fbUser.displayName || (isAnon ? 'Guest Patient' : 'Patient'),
+          email: existingData.email || email,
+          role: existingData.role || role,
+          avatar: existingData.avatar || fbUser.photoURL || undefined,
+          phone: existingData.phone || extraData?.phone,
+          city: existingData.city || extraData?.city || 'Karachi',
+          address: existingData.address,
+          provider: isAnon ? 'guest' : (fbUser.providerData[0]?.providerId.includes('google') ? 'google' : 'email'),
+          createdAt: existingData.createdAt || new Date().toISOString(),
+          savedMizaj: existingData.savedMizaj,
+          orderCount: existingData.orderCount || 0
+        };
+      } else {
+        // Create initial user doc
+        profile = {
+          id: fbUser.uid,
+          name: extraData?.name || fbUser.displayName || (isAnon ? 'Guest Patient' : (email.split('@')[0])),
+          email: email,
+          role: role,
+          avatar: fbUser.photoURL || undefined,
+          phone: extraData?.phone || '',
+          city: extraData?.city || 'Karachi',
+          provider: isAnon ? 'guest' : (fbUser.providerData[0]?.providerId.includes('google') ? 'google' : 'email'),
+          createdAt: new Date().toISOString(),
+          orderCount: 0
+        };
+
+        await setDoc(userDocRef, {
+          ...profile,
+          serverCreated: serverTimestamp(),
+        }, { merge: true });
+      }
+
+      setUser(profile);
+      try {
+        localStorage.setItem('tameer_firebase_user', JSON.stringify(profile));
+      } catch {}
+
+      return profile;
+    } catch (err) {
+      console.error('Firestore user sync error:', err);
+      // Fallback local representation
+      const isUserAdmin = ADMIN_EMAILS.includes(fbUser.email?.toLowerCase() || '');
+      const profile: AuthUser = {
+        id: fbUser.uid,
+        name: fbUser.displayName || (fbUser.isAnonymous ? 'Guest Patient' : 'Patient'),
+        email: fbUser.email || `guest_${fbUser.uid.slice(0, 6)}@tameersehat.pk`,
+        role: isUserAdmin ? 'admin' : (fbUser.isAnonymous ? 'guest' : 'user'),
+        avatar: fbUser.photoURL || undefined,
+        provider: fbUser.isAnonymous ? 'guest' : 'email',
+        createdAt: new Date().toISOString()
+      };
+      setUser(profile);
+      return profile;
     }
   };
 
-  const clearAuthSession = () => {
-    setToken(null);
-    setUser(null);
-    try {
-      localStorage.removeItem('tameer_jwt_token');
-      localStorage.removeItem('tameer_user_data');
-      document.cookie = 'tameer_jwt_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    } catch (e) {
-      console.error('Failed to clear auth session:', e);
-    }
-  };
-
-  // Background verification of token on mount
+  // Listen to Firebase Auth state changes
   useEffect(() => {
-    let isMounted = true;
-    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('tameer_jwt_token') : null;
-    if (!storedToken) return;
-
-    fetch('/api/auth/me', {
-      headers: { 'Authorization': `Bearer ${storedToken}` }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (!isMounted) return;
-        if (data.success && data.user) {
-          setUser(data.user);
-          try {
-            localStorage.setItem('tameer_user_data', JSON.stringify(data.user));
-          } catch {}
-        } else {
-          clearAuthSession();
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      setIsLoading(true);
+      if (fbUser) {
+        setFirebaseUser(fbUser);
+        try {
+          const idToken = await fbUser.getIdToken();
+          setToken(idToken);
+          await syncUserDoc(fbUser);
+        } catch (e) {
+          console.error('Error fetching ID token or syncing:', e);
         }
-      })
-      .catch(() => {
-        // Keep offline cached user if network fails temporarily
-      });
+      } else {
+        setFirebaseUser(null);
+        setUser(null);
+        setToken(null);
+        try {
+          localStorage.removeItem('tameer_firebase_user');
+        } catch {}
+      }
+      setIsLoading(false);
+    });
 
-    return () => {
-      isMounted = false;
-    };
+    return () => unsubscribe();
   }, []);
 
-  // Login Handler
+  // Login with Email & Password
   const login = async (email: string, password: string): Promise<{ success: boolean; message?: string }> => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        saveAuthSession(data.token, data.user);
-        setIsAuthModalOpen(false);
-        return { success: true, message: data.message };
-      } else {
-        return { success: false, message: data.message || 'Login failed. Please verify credentials.' };
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      await syncUserDoc(userCredential.user);
+      setIsAuthModalOpen(false);
+      return { success: true, message: 'Successfully signed in with Firebase' };
+    } catch (error: any) {
+      console.error('Firebase sign-in error:', error);
+      let errorMsg = 'Failed to sign in. Please verify your credentials.';
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        errorMsg = 'Invalid email or password. Please check your credentials or create a new account.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMsg = 'Too many failed attempts. Please try again in a few minutes.';
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, message: 'Network error occurred during login' };
+      return { success: false, message: errorMsg };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Registration Handler
+  // Register with Email & Password
   const register = async (
     name: string,
     email: string,
@@ -150,120 +207,109 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   ): Promise<{ success: boolean; message?: string }> => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, phone, city }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        saveAuthSession(data.token, data.user);
-        setIsAuthModalOpen(false);
-        return { success: true, message: data.message };
-      } else {
-        return { success: false, message: data.message || 'Registration failed' };
+      const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      
+      // Update display name
+      if (name) {
+        await updateFirebaseProfile(userCredential.user, { displayName: name });
       }
-    } catch (error) {
-      console.error('Registration error:', error);
-      return { success: false, message: 'Network error occurred during registration' };
+
+      await syncUserDoc(userCredential.user, { name, phone, city });
+      setIsAuthModalOpen(false);
+      return { success: true, message: 'Account registered successfully' };
+    } catch (error: any) {
+      console.error('Firebase registration error:', error);
+      let errorMsg = 'Failed to register account.';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg = 'An account with this email already exists. Please sign in instead.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg = 'Password should be at least 6 characters.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMsg = 'Please enter a valid email address.';
+      }
+      return { success: false, message: errorMsg };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Google Sign-In Handler
-  const loginWithGoogle = async (customData?: { name: string; email: string; avatar?: string }): Promise<{ success: boolean; message?: string }> => {
+  // Google Sign-In with real Firebase Popup
+  const loginWithGoogle = async (): Promise<{ success: boolean; message?: string }> => {
     try {
       setIsLoading(true);
-      const payload = customData || {
-        name: 'Google User',
-        email: 'user.google@gmail.com',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
-        googleId: 'google_' + Date.now(),
-      };
-
-      const res = await fetch('/api/auth/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        saveAuthSession(data.token, data.user);
-        setIsAuthModalOpen(false);
-        setIsGooglePopupOpen(false);
-        return { success: true, message: data.message };
-      } else {
-        return { success: false, message: data.message || 'Google sign-in failed' };
+      const result = await signInWithPopup(auth, googleProvider);
+      await syncUserDoc(result.user);
+      setIsAuthModalOpen(false);
+      return { success: true, message: `Signed in as ${result.user.displayName || result.user.email}` };
+    } catch (error: any) {
+      console.error('Firebase Google popup error:', error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        return { success: false, message: 'Google sign-in popup was closed before completing.' };
       }
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-      return { success: false, message: 'Google authentication service unreachable' };
+      return { success: false, message: error.message || 'Google sign-in could not be completed.' };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Guest Session Handler
+  // Continue as Anonymous Guest
   const continueAsGuest = async (): Promise<{ success: boolean; message?: string }> => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/auth/guest', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        saveAuthSession(data.token, data.user);
-        setIsAuthModalOpen(false);
-        return { success: true, message: 'Browsing as Guest Patient' };
-      } else {
-        return { success: false, message: data.message || 'Failed to initialize guest session' };
-      }
-    } catch (error) {
-      console.error('Guest session error:', error);
-      return { success: false, message: 'Network error creating guest mode' };
+      const result = await signInAnonymously(auth);
+      await syncUserDoc(result.user);
+      setIsAuthModalOpen(false);
+      return { success: true, message: 'Guest session created' };
+    } catch (error: any) {
+      console.error('Firebase Anonymous auth error:', error);
+      return { success: false, message: 'Failed to initialize anonymous guest session.' };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Update Profile Handler
+  // Update Profile
   const updateProfile = async (data: Partial<AuthUser>): Promise<{ success: boolean; message?: string }> => {
-    if (!token) return { success: false, message: 'Not authenticated' };
+    if (!auth.currentUser) return { success: false, message: 'Not authenticated with Firebase' };
 
     try {
-      const res = await fetch('/api/auth/me', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
+      const userDocRef = doc(db, 'users', auth.currentUser.uid);
+      await updateDoc(userDocRef, {
+        ...data,
+        updatedAt: new Date().toISOString()
       });
 
-      const resData = await res.json();
-      if (res.ok && resData.success && resData.user) {
-        setUser(resData.user);
-        try {
-          localStorage.setItem('tameer_user_data', JSON.stringify(resData.user));
-        } catch {}
-        return { success: true, message: 'Profile updated successfully' };
-      } else {
-        return { success: false, message: resData.message || 'Update failed' };
+      if (data.name) {
+        await updateFirebaseProfile(auth.currentUser, { displayName: data.name });
       }
+
+      setUser(prev => prev ? { ...prev, ...data } : null);
+      try {
+        if (user) {
+          localStorage.setItem('tameer_firebase_user', JSON.stringify({ ...user, ...data }));
+        }
+      } catch {}
+
+      return { success: true, message: 'Profile updated in Firestore' };
     } catch (error) {
       console.error('Update profile error:', error);
-      return { success: false, message: 'Failed to communicate with server' };
+      return { success: false, message: 'Failed to save changes to database.' };
     }
   };
 
-  // Logout Handler
-  const logout = () => {
-    clearAuthSession();
+  // Sign out
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      setFirebaseUser(null);
+      setToken(null);
+      try {
+        localStorage.removeItem('tameer_firebase_user');
+      } catch {}
+    } catch (e) {
+      console.error('Sign out error:', e);
+    }
   };
 
   const openAuthModal = (tab: 'login' | 'register' | 'guest' = 'login') => {
@@ -275,14 +321,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsAuthModalOpen(false);
   };
 
-  const openGooglePopup = () => {
-    setIsGooglePopupOpen(true);
-  };
-
-  const closeGooglePopup = () => {
-    setIsGooglePopupOpen(false);
-  };
-
   const role = user ? user.role : null;
   const isAuthenticated = !!user && user.role !== 'guest';
   const isAdmin = user?.role === 'admin';
@@ -292,6 +330,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        firebaseUser,
         token,
         role,
         isAuthenticated,
@@ -308,9 +347,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         authModalTab,
         openAuthModal,
         closeAuthModal,
-        isGooglePopupOpen,
-        openGooglePopup,
-        closeGooglePopup,
       }}
     >
       {children}

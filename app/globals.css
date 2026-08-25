@@ -1,1 +1,87 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #00873E;
+  --color-primary-hover: #007335;
+  --color-primary-dark: #005c2a;
+  --color-primary-light: #f0faf4;
+  --color-primary-surface: #e6f7ec;
+  --color-primary-border: #b0e6c4;
+}
+
+:root {
+  --brand-primary: #00873E;
+  --brand-primary-hover: #007335;
+  --brand-primary-dark: #005c2a;
+  --brand-primary-light: #f0faf4;
+  --brand-primary-surface: #e6f7ec;
+  --brand-primary-border: #b0e6c4;
+  --brand-white: #ffffff;
+  --brand-dark: #0b2317;
+}
+
+/* Primary Action Buttons */
+.btn-primary {
+  background-color: #00873E;
+  color: #ffffff;
+  transition: all 0.2s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #007335;
+}
+.btn-primary:active {
+  background-color: #005c2a;
+}
+
+/* Primary Outline Buttons */
+.btn-primary-outline {
+  border: 1.5px solid #00873E;
+  color: #00873E;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+}
+.btn-primary-outline:hover {
+  background-color: #f0faf4;
+}
+
+/* Primary Badge / Tag */
+.badge-primary {
+  background-color: #e6f7ec;
+  color: #00873E;
+  border: 1px solid #b0e6c4;
+}
+
+/* Primary Accent Text */
+.text-primary-brand {
+  color: #00873E;
+}
+
+/* Primary Accent Background */
+.bg-primary-brand {
+  background-color: #00873E;
+}
+
+/* Primary Focus Ring */
+.focus-primary {
+  outline: none;
+}
+.focus-primary:focus {
+  border-color: #00873E;
+  box-shadow: 0 0 0 2px rgba(0, 135, 62, 0.2);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #00873E;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #007335;
+}

@@ -8,13 +8,32 @@ export type ProductCategory =
   | 'safoof-powders'
   | 'herbal-oils'
   | 'health-courses'
-  | 'honey-shifa';
+  | 'honey-shifa'
+  | 'sharbat-syrups'
+  | 'hab-tablets'
+  | 'khamira'
+  | 'itrifal'
+  | 'tila-applications'
+  | string;
+
+export interface CategoryItem {
+  id: string;
+  nameEn: string;
+  nameUr: string;
+  icon?: string;
+  description?: string;
+  descriptionUrdu?: string;
+  itemCount?: number;
+  badgeColor?: string;
+}
 
 export interface ProductVariant {
   weight: string;
   price: number; // in PKR
   originalPrice?: number;
   inStock: boolean;
+  stockCount?: number;
+  sku?: string;
 }
 
 export interface Product {
@@ -33,7 +52,7 @@ export interface Product {
   rating: number;
   reviewsCount: number;
   image: string;
-  badge?: 'bestseller' | 'pure-certified' | 'hakeem-special' | 'limited';
+  badge?: 'bestseller' | 'pure-certified' | 'hakeem-special' | 'limited' | 'heritage-formula' | 'organic' | 'featured' | string;
   benefits: string[];
   benefitsUrdu: string[];
   ingredients: string[];
@@ -61,9 +80,11 @@ export interface HakeemProfile {
   titleUrdu: string;
   experienceYears: number;
   qualification: string;
+  qualificationUrdu?: string;
   specialties: string[];
   specialtiesUrdu: string[];
   availableDays: string;
+  availableDaysUrdu?: string;
   consultationFee: number; // 0 for free basic or small token
   image: string;
   rating: number;

@@ -4,20 +4,11 @@ import React, { useState } from 'react';
 import { 
   Stethoscope, 
   MessageSquare, 
-  Phone, 
-  Video, 
-  MapPin, 
-  Calendar, 
-  Clock, 
-  CheckCircle2, 
   Star, 
-  ShieldCheck, 
-  UserCheck, 
-  ArrowRight,
-  Send
+  UserCheck
 } from 'lucide-react';
-import { HAKEEMS, STORE_PHONE, STORE_WHATSAPP, STORE_ADDRESS_EN, STORE_ADDRESS_UR } from '@/lib/data';
-import { Language, HakeemProfile, ConsultationRequest } from '@/lib/types';
+import { HAKEEMS, STORE_PHONE, STORE_WHATSAPP } from '@/lib/data';
+import { Language, HakeemProfile } from '@/lib/types';
 
 interface HakeemConsultationSectionProps {
   language: Language;
@@ -25,7 +16,7 @@ interface HakeemConsultationSectionProps {
 
 export default function HakeemConsultationSection({ language }: HakeemConsultationSectionProps) {
   const [selectedHakeem, setSelectedHakeem] = useState<HakeemProfile>(HAKEEMS[0]);
-  const [mode, setMode] = useState<'whatsapp-chat' | 'audio-call' | 'video-call' | 'in-clinic'>('whatsapp-chat');
+  const [mode] = useState<'whatsapp-chat' | 'audio-call' | 'video-call' | 'in-clinic'>('whatsapp-chat');
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -36,11 +27,9 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
     durationOfIssue: '6 months',
     notes: ''
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
 
     // Auto-compose WhatsApp message
     const consultationText = encodeURIComponent(
@@ -68,12 +57,12 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-[#199b50] text-xs font-bold uppercase tracking-wider mb-2 border border-emerald-100">
-            <Stethoscope className="w-3.5 h-3.5 text-[#199b50]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f0faf4] text-[#00873E] text-xs font-bold uppercase tracking-wider mb-2 border border-[#b0e6c4]">
+            <Stethoscope className="w-3.5 h-3.5 text-[#00873E]" />
             <span>{language === 'ur' ? 'آن لائن حکیم مشورہ' : 'Free Hakeem Consultation'}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#18232c] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0b2317] tracking-tight">
             {language === 'ur' 
               ? 'مستند و تجربہ کار اطباء سے مفت طبی مشورہ' 
               : 'Consult Certified Herbalists & Hakims'}
@@ -90,8 +79,8 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
           
           {/* Left Column: Hakeem Profiles Selector */}
           <div className="lg:col-span-5 space-y-3">
-            <h3 className="text-xs font-bold text-[#18232c] uppercase tracking-wider flex items-center gap-2 mb-2">
-              <UserCheck className="w-4 h-4 text-[#199b50]" />
+            <h3 className="text-xs font-bold text-[#0b2317] uppercase tracking-wider flex items-center gap-2 mb-2">
+              <UserCheck className="w-4 h-4 text-[#00873E]" />
               <span>{language === 'ur' ? 'طبیب منتخب کریں:' : 'Select Specialist:'}</span>
             </h3>
 
@@ -104,7 +93,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                   onClick={() => setSelectedHakeem(hakim)}
                   className={`p-4 rounded-xl cursor-pointer transition-all border ${
                     isSelected
-                      ? 'bg-slate-50 border-[#199b50] shadow-md ring-1 ring-[#199b50]'
+                      ? 'bg-[#f0faf4] border-[#00873E] shadow-md ring-1 ring-[#00873E]'
                       : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
                   }`}
                 >
@@ -121,12 +110,12 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                         </h4>
                       </div>
                       
-                      <p className="text-xs text-[#199b50] font-semibold mt-0.5">
+                      <p className="text-xs text-[#00873E] font-semibold mt-0.5">
                         {language === 'ur' ? hakim.titleUrdu : hakim.title}
                       </p>
 
                       <div className="flex items-center gap-3 mt-1.5 text-xs">
-                        <span className="bg-emerald-100/60 text-[#199b50] px-2 py-0.5 rounded-sm font-semibold text-[10px]">
+                        <span className="bg-[#e6f7ec] text-[#00873E] px-2 py-0.5 rounded-sm font-semibold text-[10px]">
                           {hakim.experienceYears}+ Yrs Exp
                         </span>
 
@@ -142,10 +131,10 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
             })}
 
             {/* Direct WhatsApp Call Banner */}
-            <div className="p-4 rounded-xl bg-[#18232c] text-white space-y-2">
+            <div className="p-4 rounded-xl bg-[#0b2317] text-white space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-emerald-400 uppercase">
                 <span>Immediate Assistance</span>
-                <span className="bg-[#199b50] text-white text-[10px] px-2 py-0.5 rounded-sm">Direct</span>
+                <span className="bg-[#00873E] text-white text-[10px] px-2 py-0.5 rounded-sm font-bold">Direct</span>
               </div>
               <p className="text-xs text-slate-300">
                 Prefer to speak right now? Call or message our central Dawakhana line in Karachi:
@@ -154,7 +143,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                 href={`https://wa.me/${STORE_WHATSAPP}?text=Assalam-o-Alaikum%20Tameer-e-Sehat,%20I%20want%20direct%20consultation.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 rounded-md bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>WhatsApp: {STORE_PHONE}</span>
@@ -165,7 +154,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
 
           {/* Right Column: Consultation Intake Form */}
           <div className="lg:col-span-7 bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs">
-            <h3 className="text-base sm:text-lg font-bold text-[#18232c] mb-4 flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-bold text-[#0b2317] mb-4 flex items-center gap-2">
               <span>{language === 'ur' ? 'آن لائن طبی فارم پُر کریں' : 'Book Free Consultation'}</span>
               <span className="text-xs font-normal text-slate-500">
                 (with {selectedHakeem.name})
@@ -185,7 +174,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="e.g. Muhammad Usman"
-                    className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-md border border-slate-300 focus:border-[#199b50] focus:ring-1 focus:ring-[#199b50] outline-none"
+                    className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] focus:ring-1 focus:ring-[#00873E] outline-none"
                   />
                 </div>
 
@@ -199,7 +188,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="0300-1234567"
-                    className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-md border border-slate-300 focus:border-[#199b50] focus:ring-1 focus:ring-[#199b50] outline-none"
+                    className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] focus:ring-1 focus:ring-[#00873E] outline-none"
                   />
                 </div>
               </div>
@@ -215,7 +204,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     placeholder="Karachi, Lahore..."
-                    className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-md border border-slate-300 focus:border-[#199b50] outline-none"
+                    className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   />
                 </div>
 
@@ -229,7 +218,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                     value={formData.age}
                     onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                     placeholder="32"
-                    className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-md border border-slate-300 focus:border-[#199b50] outline-none"
+                    className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   />
                 </div>
 
@@ -240,7 +229,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                   <select
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
-                    className="w-full bg-white text-slate-800 text-xs px-2.5 py-2 rounded-md border border-slate-300 focus:border-[#199b50] outline-none"
+                    className="w-full bg-white text-slate-800 text-xs px-2.5 py-2 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                   >
                     <option value="male">Male (مرد)</option>
                     <option value="female">Female (خواتین)</option>
@@ -255,7 +244,7 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                 <select
                   value={formData.primaryIssue}
                   onChange={(e) => setFormData({ ...formData, primaryIssue: e.target.value })}
-                  className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-md border border-slate-300 focus:border-[#199b50] outline-none"
+                  className="w-full bg-white text-slate-800 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                 >
                   <option value="Men Vitality & Stamina">Men Vitality & Physical Stamina (مردانہ کمزوری و قوت)</option>
                   <option value="Kidney Stone & Urinary (STONIL)">Kidney Stones & Burning Urine / STONIL (گردے کی پتھری)</option>
@@ -277,13 +266,13 @@ export default function HakeemConsultationSection({ language }: HakeemConsultati
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   placeholder="Any symptoms, ongoing medicines, or medical reports..."
-                  className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-md border border-slate-300 focus:border-[#199b50] outline-none"
+                  className="w-full bg-white text-slate-800 text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-md bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>{language === 'ur' ? 'واٹس ایپ پر مفت مشورہ شروع کریں' : 'Send & Start WhatsApp Consultation'}</span>

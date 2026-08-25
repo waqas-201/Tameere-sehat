@@ -7,9 +7,7 @@ import {
   BookOpen, 
   Leaf, 
   AlertCircle, 
-  ArrowRight, 
-  ShoppingBag,
-  Sparkles
+  ShoppingBag
 } from 'lucide-react';
 import { HERB_ENCYCLOPEDIA } from '@/lib/data';
 import { Language, HerbEntry } from '@/lib/types';
@@ -40,13 +38,13 @@ export default function HerbEncyclopediaModal({
   );
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-emerald-100 overflow-hidden relative max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      <div className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="bg-[#0e2a1f] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-900">
+        <div className="bg-[#0b2317] text-white p-5 sm:p-6 flex items-center justify-between border-b border-emerald-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/40">
+            <div className="w-10 h-10 rounded-xl bg-[#00873E] text-white flex items-center justify-center border border-white/20">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
@@ -61,7 +59,7 @@ export default function HerbEncyclopediaModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-emerald-100 transition-colors"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -71,7 +69,7 @@ export default function HerbEncyclopediaModal({
         <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
           
           {/* Left Column: Search & Herb List */}
-          <div className="md:w-5/12 border-r border-slate-200 p-4 sm:p-5 flex flex-col bg-slate-50/50">
+          <div className="md:w-5/12 border-r border-slate-200 p-4 sm:p-5 flex flex-col bg-slate-50">
             
             {/* Search Input */}
             <div className="relative mb-3">
@@ -80,7 +78,7 @@ export default function HerbEncyclopediaModal({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={language === 'ur' ? 'جڑی بوٹی تلاش کریں...' : 'Search herb by name or use...'}
-                className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 outline-none bg-white"
+                className="w-full text-xs pl-8 pr-3 py-2.5 rounded-xl border border-slate-300 focus:border-[#00873E] outline-none bg-white"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-2.5 top-3" />
             </div>
@@ -95,8 +93,8 @@ export default function HerbEncyclopediaModal({
                     onClick={() => setSelectedHerb(herb)}
                     className={`p-3 rounded-2xl cursor-pointer transition-all flex items-center gap-3 border ${
                       isSelected
-                        ? 'bg-emerald-900 text-white border-emerald-900 shadow-md'
-                        : 'bg-white hover:bg-emerald-50 text-slate-800 border-slate-200/80'
+                        ? 'bg-[#00873E] text-white border-[#00873E] shadow-md'
+                        : 'bg-white hover:bg-[#f0faf4] text-slate-800 border-slate-200'
                     }`}
                   >
                     <img
@@ -108,7 +106,7 @@ export default function HerbEncyclopediaModal({
                       <h4 className="text-xs sm:text-sm font-bold truncate">
                         {language === 'ur' ? herb.urduName : herb.englishName}
                       </h4>
-                      <p className={`text-[11px] truncate italic ${isSelected ? 'text-amber-300' : 'text-slate-500'}`}>
+                      <p className={`text-[11px] truncate italic ${isSelected ? 'text-emerald-100' : 'text-slate-500'}`}>
                         {herb.botanicalName}
                       </p>
                     </div>
@@ -124,18 +122,18 @@ export default function HerbEncyclopediaModal({
             
             <div className="flex items-start justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-700 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#00873E] uppercase tracking-wider">
                   {selectedHerb.botanicalName}
                 </span>
                 <h3 className="text-2xl font-serif font-black text-slate-900 mt-0.5">
                   {language === 'ur' ? selectedHerb.urduName : selectedHerb.englishName}
                 </h3>
-                <p className="text-xs text-emerald-800 font-semibold mt-0.5">
+                <p className="text-xs text-slate-600 font-semibold mt-0.5">
                   {language === 'ur' ? selectedHerb.englishName : selectedHerb.urduName}
                 </p>
               </div>
 
-              <div className="aspect-square w-20 rounded-2xl overflow-hidden shadow-md shrink-0">
+              <div className="aspect-square w-20 rounded-2xl overflow-hidden shadow-md shrink-0 border border-slate-200">
                 <img
                   src={selectedHerb.image}
                   alt={selectedHerb.englishName}
@@ -145,12 +143,12 @@ export default function HerbEncyclopediaModal({
             </div>
 
             {/* Mizaj Box */}
-            <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
-              <span className="font-bold text-emerald-950 flex items-center gap-1.5">
-                <Leaf className="w-4 h-4 text-emerald-700" />
+            <div className="p-3 rounded-2xl bg-[#f0faf4] border border-[#b0e6c4] flex items-center justify-between text-xs">
+              <span className="font-bold text-[#0b2317] flex items-center gap-1.5">
+                <Leaf className="w-4 h-4 text-[#00873E]" />
                 {language === 'ur' ? 'طبی مزاج:' : 'Unani Temperament:'}
               </span>
-              <span className="font-black text-emerald-900 bg-white px-2.5 py-1 rounded-lg border border-emerald-200">
+              <span className="font-bold text-[#00873E] bg-white px-2.5 py-1 rounded-lg border border-[#b0e6c4]">
                 {language === 'ur' ? selectedHerb.mizajUrdu : selectedHerb.mizaj}
               </span>
             </div>
@@ -173,7 +171,7 @@ export default function HerbEncyclopediaModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {(language === 'ur' ? selectedHerb.primaryUsesUrdu : selectedHerb.primaryUses).map((use, idx) => (
                   <div key={idx} className="p-2.5 rounded-xl bg-slate-50 text-slate-800 text-xs flex items-center gap-2 border border-slate-200">
-                    <span className="text-emerald-700 font-bold">✓</span>
+                    <span className="text-[#00873E] font-bold">✓</span>
                     <span>{use}</span>
                   </div>
                 ))}
@@ -199,9 +197,9 @@ export default function HerbEncyclopediaModal({
                     onClose();
                     onSelectProduct(selectedHerb.relatedProductId!);
                   }}
-                  className="w-full py-3 px-4 rounded-xl bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-colors"
+                  className="w-full py-3 px-4 rounded-xl bg-[#00873E] hover:bg-[#007335] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-colors"
                 >
-                  <ShoppingBag className="w-4 h-4 text-amber-300" />
+                  <ShoppingBag className="w-4 h-4 text-white" />
                   <span>{language === 'ur' ? 'یہ خالص جڑی بوٹی آن لائن خریدیں' : 'Purchase Pure Verified Herb in Store'}</span>
                 </button>
               </div>

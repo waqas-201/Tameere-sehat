@@ -12,7 +12,6 @@ import {
   Flame, 
   Zap, 
   Activity, 
-  Leaf,
   Scale
 } from 'lucide-react';
 import { Language, Product, ProductVariant } from '@/lib/types';
@@ -121,7 +120,7 @@ export default function CustomCourseBuilder({
   };
 
   return (
-    <section id="course-builder-section" className="py-12 sm:py-16 bg-[#557b5d] text-white relative overflow-hidden">
+    <section id="course-builder-section" className="py-12 sm:py-16 bg-[#00873E] text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -137,7 +136,7 @@ export default function CustomCourseBuilder({
               : 'Build Your Custom Hakeem Herbal Course'}
           </h2>
 
-          <p className="text-xs sm:text-sm text-emerald-100 mt-2 max-w-2xl mx-auto font-normal">
+          <p className="text-xs sm:text-sm text-emerald-50 mt-2 max-w-2xl mx-auto font-normal">
             {language === 'ur'
               ? 'طبی ہدف، بنیادی میڈیم (معجون، سفوف یا عرق) اور نایاب اجزاء (سلاجیت، زعفران وغیرہ) منتخب کریں۔ ہمارے دوا ساز آپ کے لیے تازہ تیار کریں گے۔'
               : 'Select your health objective, base medium, and botanical boosters. Compounded fresh by our certified Karachi dawakhana pharmacists.'}
@@ -145,7 +144,7 @@ export default function CustomCourseBuilder({
         </div>
 
         {/* Builder Container */}
-        <div className="bg-white text-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl">
+        <div className="bg-white text-slate-800 p-6 sm:p-8 rounded-3xl shadow-2xl border border-slate-100">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left 8 Cols: Steps */}
@@ -153,7 +152,7 @@ export default function CustomCourseBuilder({
               
               {/* Step 1: Health Goal */}
               <div>
-                <span className="text-xs font-bold text-[#18232c] uppercase tracking-wider block mb-2">
+                <span className="text-xs font-bold text-[#0b2317] uppercase tracking-wider block mb-2">
                   1. {language === 'ur' ? 'طبی ہدف منتخب کریں:' : 'Select Primary Health Goal:'}
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -165,13 +164,13 @@ export default function CustomCourseBuilder({
                         key={g.id}
                         type="button"
                         onClick={() => setGoal(g.id as any)}
-                        className={`p-3 rounded-lg border text-left flex items-center gap-3 transition-all ${
+                        className={`p-3 rounded-xl border text-left flex items-center gap-3 transition-all ${
                           isSelected
-                            ? 'bg-emerald-50 border-[#199b50] text-[#199b50] font-bold shadow-xs'
+                            ? 'bg-[#f0faf4] border-[#00873E] text-[#00873E] font-bold shadow-xs'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
-                        <Icon className="w-4 h-4 shrink-0 text-[#199b50]" />
+                        <Icon className="w-4 h-4 shrink-0 text-[#00873E]" />
                         <span className="text-xs">{language === 'ur' ? g.nameUr : g.nameEn}</span>
                       </button>
                     );
@@ -181,7 +180,7 @@ export default function CustomCourseBuilder({
 
               {/* Step 2: Base Medium */}
               <div>
-                <span className="text-xs font-bold text-[#18232c] uppercase tracking-wider block mb-2">
+                <span className="text-xs font-bold text-[#0b2317] uppercase tracking-wider block mb-2">
                   2. {language === 'ur' ? 'بنیادی میڈیم منتخب کریں:' : 'Select Base Formulation Type:'}
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -192,15 +191,15 @@ export default function CustomCourseBuilder({
                         key={b.id}
                         type="button"
                         onClick={() => setBase(b.id as any)}
-                        className={`p-3.5 rounded-lg border text-left transition-all ${
+                        className={`p-3.5 rounded-xl border text-left transition-all ${
                           isSelected
-                            ? 'bg-emerald-50 border-[#199b50] ring-1 ring-[#199b50]'
+                            ? 'bg-[#f0faf4] border-[#00873E] ring-1 ring-[#00873E]'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-slate-900">{b.nameEn.split(' ')[0]}</span>
-                          <span className="text-xs text-[#199b50] font-bold">Rs. {b.basePrice}</span>
+                          <span className="text-xs text-[#00873E] font-bold">Rs. {b.basePrice}</span>
                         </div>
                         <p className="text-[11px] text-slate-500 mt-1">{b.desc}</p>
                       </button>
@@ -211,7 +210,7 @@ export default function CustomCourseBuilder({
 
               {/* Step 3: Potent Boosters */}
               <div>
-                <span className="text-xs font-bold text-[#18232c] uppercase tracking-wider block mb-2">
+                <span className="text-xs font-bold text-[#0b2317] uppercase tracking-wider block mb-2">
                   3. {language === 'ur' ? 'نایاب اجزاء و بوسٹرز شامل کریں:' : 'Add Premium Botanical Boosters:'}
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -222,9 +221,9 @@ export default function CustomCourseBuilder({
                         key={b.id}
                         type="button"
                         onClick={() => toggleBooster(b.id)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all border ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all border ${
                           isSelected
-                            ? 'bg-[#199b50] text-white border-[#199b50] shadow-xs'
+                            ? 'bg-[#00873E] text-white border-[#00873E] shadow-xs'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
@@ -238,7 +237,7 @@ export default function CustomCourseBuilder({
 
               {/* Step 4: Duration */}
               <div>
-                <span className="text-xs font-bold text-[#18232c] uppercase tracking-wider block mb-2">
+                <span className="text-xs font-bold text-[#0b2317] uppercase tracking-wider block mb-2">
                   4. {language === 'ur' ? 'کورس کی مدت:' : 'Select Course Duration:'}
                 </span>
                 <div className="grid grid-cols-3 gap-2.5">
@@ -253,9 +252,9 @@ export default function CustomCourseBuilder({
                         key={d.days}
                         type="button"
                         onClick={() => setDurationDays(d.days as any)}
-                        className={`p-2.5 rounded-lg border text-center transition-all ${
+                        className={`p-2.5 rounded-xl border text-center transition-all ${
                           isSelected
-                            ? 'bg-[#18232c] text-white font-bold border-[#18232c]'
+                            ? 'bg-[#0b2317] text-white font-bold border-[#0b2317]'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
@@ -270,13 +269,13 @@ export default function CustomCourseBuilder({
             </div>
 
             {/* Right 4 Cols: Live Price Summary & Order Card */}
-            <div className="lg:col-span-4 bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-4">
+            <div className="lg:col-span-4 bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
               
               <div className="pb-3 border-b border-slate-200 flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#18232c]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0b2317]">
                   {language === 'ur' ? 'نسخہ خلاصہ' : 'Formula Summary'}
                 </span>
-                <span className="text-xs font-bold text-[#199b50]">
+                <span className="text-xs font-bold text-[#00873E]">
                   {durationDays} Days Plan
                 </span>
               </div>
@@ -293,14 +292,14 @@ export default function CustomCourseBuilder({
                 </div>
                 <div className="flex justify-between">
                   <span>Active Boosters:</span>
-                  <span className="font-bold text-[#199b50]">{selectedBoosters.length} Items</span>
+                  <span className="font-bold text-[#00873E]">{selectedBoosters.length} Items</span>
                 </div>
               </div>
 
               {/* Total Price */}
               <div className="pt-3 border-t border-slate-200 flex items-baseline justify-between">
                 <span className="text-xs font-medium text-slate-600">Total Price:</span>
-                <span className="text-2xl font-black text-[#199b50]">
+                <span className="text-2xl font-black text-[#00873E]">
                   Rs. {totalPrice.toLocaleString()}
                 </span>
               </div>
@@ -309,10 +308,10 @@ export default function CustomCourseBuilder({
               <div className="space-y-2 pt-2">
                 <button
                   onClick={handleAddCustomToCart}
-                  className={`w-full py-3 px-4 rounded-md font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${
+                  className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${
                     isAdded
-                      ? 'bg-[#18232c] text-white'
-                      : 'bg-[#199b50] hover:bg-[#158242] text-white shadow-xs'
+                      ? 'bg-[#0b2317] text-white'
+                      : 'bg-[#00873E] hover:bg-[#007335] text-white shadow-xs'
                   }`}
                 >
                   {isAdded ? (
@@ -332,15 +331,15 @@ export default function CustomCourseBuilder({
                   href={getWhatsAppCourseUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 px-4 rounded-md bg-[#18232c] hover:bg-[#111827] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
                 >
-                  <MessageSquare className="w-4 h-4 text-[#199b50]" />
+                  <MessageSquare className="w-4 h-4 text-emerald-400" />
                   <span>{language === 'ur' ? 'واٹس ایپ پر فوری آرڈر' : 'Order via WhatsApp'}</span>
                 </a>
               </div>
 
               <div className="text-[11px] text-center text-slate-500 pt-1 flex items-center justify-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#199b50]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#00873E]" />
                 <span>100% Organic, Pure & Lab-Tested Guarantee</span>
               </div>
 

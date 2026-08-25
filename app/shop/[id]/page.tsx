@@ -34,9 +34,9 @@ import ProductCard from '@/components/ProductCard';
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { language, addToCart, wishlist, toggleWishlist, setIsCartOpen } = useApp();
+  const { language, products, addToCart, wishlist, toggleWishlist, setIsCartOpen } = useApp();
 
-  const product = PRODUCTS.find((p) => p.id === resolvedParams.id) || PRODUCTS[0];
+  const product = products.find((p) => p.id === resolvedParams.id) || PRODUCTS.find((p) => p.id === resolvedParams.id) || products[0] || PRODUCTS[0];
 
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     product.variants[0] || { weight: 'Standard', price: product.price, inStock: true }
@@ -83,7 +83,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     return `https://wa.me/${STORE_WHATSAPP}?text=${text}`;
   };
 
-  const relatedProducts = PRODUCTS.filter(
+  const relatedProducts = (products || PRODUCTS).filter(
     (p) => p.category === product.category && p.id !== product.id
   ).slice(0, 3);
 
@@ -95,7 +95,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       setUserReviewName('');
       setUserReviewCity('');
       setUserReviewComment('');
-    }, 2000);
+      setReviewSubmitted(false);
+    }, 3000);
   };
 
   return (
@@ -103,14 +104,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs text-stone-500 font-medium">
-        <Link href="/" className="hover:text-[#155e42]">Home</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link href="/shop" className="hover:text-[#155e42]">Shop House Remedies</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link href={`/shop?category=${product.category}`} className="hover:text-[#155e42] capitalize">
-          {product.category.replace('-', ' ')}
+        <Link href="/" className="hover:text-[#155e42]">
+          {language === 'ur' ? 'مرکزی صفحہ' : 'Home'}
         </Link>
-        <ChevronRight className="w-3.5 h-3.5" />
+        <ChevronRight className={`w-3.5 h-3.5 ${language === 'ur' ? 'rotate-180' : ''}`} />
+        <Link href="/shop" className="hover:text-[#155e42]">
+          {language === 'ur' ? 'ادویات و شاپ' : 'Shop House Remedies'}
+        </Link>
+        <ChevronRight className={`w-3.5 h-3.5 ${language === 'ur' ? 'rotate-180' : ''}`} />
+        <Link href={`/shop?category=${product.category}`} className="hover:text-[#155e42] capitalize">
+          {language === 'ur' ? product.categoryNameUrdu : product.categoryName}
+        </Link>
+        <ChevronRight className={`w-3.5 h-3.5 ${language === 'ur' ? 'rotate-180' : ''}`} />
         <span className="text-stone-900 font-bold truncate max-w-xs">
           {language === 'ur' ? product.urduName : product.name}
         </span>
@@ -129,15 +134,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             />
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
+            <div className={`absolute top-4 ${language === 'ur' ? 'right-4' : 'left-4'} flex flex-col gap-1.5 z-10`}>
               {product.badge && (
                 <span className="bg-[#0e2a1f] text-emerald-300 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md backdrop-blur-xs">
-                  {product.badge === 'bestseller' ? 'Apothecary Bestseller' : product.badge}
+                  {language === 'ur' 
+                    ? (product.badge === 'bestseller' ? 'سب سے زیادہ مقبول' : 'خاص دوا') 
+                    : (product.badge === 'bestseller' ? 'Apothecary Bestseller' : product.badge)}
                 </span>
               )}
               {discountPercent && discountPercent > 0 && (
                 <span className="bg-[#c8232c] text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">
-                  SAVE {discountPercent}%
+                  {language === 'ur' ? `بچت ${discountPercent}%` : `SAVE ${discountPercent}%`}
                 </span>
               )}
             </div>
@@ -145,16 +152,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             {/* Wishlist Button */}
             <button
               onClick={() => toggleWishlist(product.id)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-xs text-rose-500 hover:bg-rose-50 flex items-center justify-center shadow-md transition-transform hover:scale-110 border border-stone-200"
-              title="Add to Wishlist"
+              className={`absolute top-4 ${language === 'ur' ? 'left-4' : 'right-4'} w-10 h-10 rounded-full bg-white/90 backdrop-blur-xs text-rose-500 hover:bg-rose-50 flex items-center justify-center shadow-md transition-transform hover:scale-110 border border-stone-200`}
+              title={language === 'ur' ? 'پسندیدہ میں شامل کریں' : 'Add to Wishlist'}
             >
               <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-rose-500' : ''}`} />
             </button>
 
             {/* Unani Temperament Stamp */}
-            <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md text-[#155e42] text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-md border border-stone-200/80">
+            <div className={`absolute bottom-4 ${language === 'ur' ? 'right-4' : 'left-4'} bg-white/95 backdrop-blur-md text-[#155e42] text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-md border border-stone-200/80`}>
               <Leaf className="w-4 h-4 text-[#199b50]" />
-              <span>Mizaj: {language === 'ur' ? product.mizajUrdu : product.mizaj}</span>
+              <span>{language === 'ur' ? `مزاج: ${product.mizajUrdu}` : `Mizaj: ${product.mizaj}`}</span>
             </div>
           </div>
 
@@ -162,18 +169,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <div className="grid grid-cols-3 gap-3 text-center text-xs">
             <div className="p-3 bg-white rounded-2xl border border-stone-200/80 shadow-2xs space-y-1">
               <ShieldCheck className="w-5 h-5 text-emerald-600 mx-auto" />
-              <div className="font-bold text-stone-800">100% Pure</div>
-              <div className="text-[10px] text-stone-500">Steroid-Free</div>
+              <div className="font-bold text-stone-800">{language === 'ur' ? '100% خالص' : '100% Pure'}</div>
+              <div className="text-[10px] text-stone-500">{language === 'ur' ? 'سٹیرائیڈز سے پاک' : 'Steroid-Free'}</div>
             </div>
             <div className="p-3 bg-white rounded-2xl border border-stone-200/80 shadow-2xs space-y-1">
               <Award className="w-5 h-5 text-amber-500 mx-auto" />
-              <div className="font-bold text-stone-800">Unani Certified</div>
-              <div className="text-[10px] text-stone-500">Dawakhana Lab</div>
+              <div className="font-bold text-stone-800">{language === 'ur' ? 'مستند طب یونانی' : 'Unani Certified'}</div>
+              <div className="text-[10px] text-stone-500">{language === 'ur' ? 'دواخانہ لیبارٹری' : 'Dawakhana Lab'}</div>
             </div>
             <div className="p-3 bg-white rounded-2xl border border-stone-200/80 shadow-2xs space-y-1">
               <Truck className="w-5 h-5 text-emerald-600 mx-auto" />
-              <div className="font-bold text-stone-800">Nationwide COD</div>
-              <div className="text-[10px] text-stone-500">TCS Express</div>
+              <div className="font-bold text-stone-800">{language === 'ur' ? 'کیش آن ڈلیوری' : 'Nationwide COD'}</div>
+              <div className="text-[10px] text-stone-500">{language === 'ur' ? 'پورے پاکستان میں' : 'TCS Express'}</div>
             </div>
           </div>
         </div>
@@ -190,7 +197,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                 <span className="text-xs font-bold text-stone-900">{product.rating}</span>
-                <span className="text-[11px] text-stone-500">({product.reviewsCount} reviews)</span>
+                <span className="text-[11px] text-stone-500">
+                  ({product.reviewsCount} {language === 'ur' ? 'آراء' : 'reviews'})
+                </span>
               </div>
             </div>
 
@@ -211,18 +220,22 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-2">
             <div className="flex items-baseline gap-3">
               <span className="text-3xl sm:text-4xl font-black text-[#155e42] font-serif">
-                Rs. {(selectedVariant.price * quantity).toLocaleString()}
+                {language === 'ur' ? `روپے ${(selectedVariant.price * quantity).toLocaleString()}` : `Rs. ${(selectedVariant.price * quantity).toLocaleString()}`}
               </span>
               {selectedVariant.originalPrice && (
                 <span className="text-sm text-stone-400 line-through">
-                  Rs. {(selectedVariant.originalPrice * quantity).toLocaleString()}
+                  {language === 'ur' ? `روپے ${(selectedVariant.originalPrice * quantity).toLocaleString()}` : `Rs. ${(selectedVariant.originalPrice * quantity).toLocaleString()}`}
                 </span>
               )}
             </div>
 
             <div className="text-xs text-stone-500 flex items-center gap-2 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>In Stock & Ready for Same-Day Dispensing from Karachi</span>
+              <span>
+                {language === 'ur' 
+                  ? 'دواخانہ میں تیار و موجود - اسی روز کراچی سے روانگی' 
+                  : 'In Stock & Ready for Same-Day Dispensing from Karachi'}
+              </span>
             </div>
           </div>
 
@@ -230,10 +243,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-stone-800 uppercase tracking-wider">
-                Select Packing / Potency:
+                {language === 'ur' ? 'پیکنگ / وزن منتخب کریں:' : 'Select Packing / Potency:'}
               </span>
               <span className="text-stone-500 font-medium">
-                Selected: <strong className="text-stone-900">{selectedVariant.weight}</strong>
+                {language === 'ur' ? 'منتخب شدہ:' : 'Selected:'} <strong className="text-stone-900">{selectedVariant.weight}</strong>
               </span>
             </div>
 
@@ -251,7 +264,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 >
                   <div className="text-xs font-bold">{v.weight}</div>
                   <div className={`text-xs font-mono mt-0.5 ${selectedVariant.weight === v.weight ? 'text-emerald-300' : 'text-[#155e42] font-semibold'}`}>
-                    Rs. {v.price.toLocaleString()}
+                    {language === 'ur' ? `روپے ${v.price.toLocaleString()}` : `Rs. ${v.price.toLocaleString()}`}
                   </div>
                 </button>
               ))}
@@ -289,7 +302,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 className="flex-1 h-12 rounded-xl bg-[#199b50] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
               >
                 {isAdded ? <Check className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-                <span>{isAdded ? 'Added to Bag!' : 'Add to Bag'}</span>
+                <span>
+                  {isAdded 
+                    ? (language === 'ur' ? 'شامل کر دیا گیا!' : 'Added to Bag!') 
+                    : (language === 'ur' ? 'کارٹ میں شامل کریں' : 'Add to Bag')}
+                </span>
               </button>
             </div>
 
@@ -297,10 +314,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button
                 onClick={handleBuyNow}
-                className="py-3 px-4 rounded-xl bg-[#0e2a1f] hover:bg-[#155e42] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all"
+                className="py-3 px-4 rounded-xl bg-[#0e2a1f] hover:bg-[#158242] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all"
               >
-                <span>Buy Now with Cash on Delivery</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>{language === 'ur' ? 'کیش آن ڈلیوری آرڈر کریں' : 'Buy Now with Cash on Delivery'}</span>
+                <ArrowRight className={`w-4 h-4 ${language === 'ur' ? 'rotate-180' : ''}`} />
               </button>
 
               <a
@@ -310,7 +327,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 className="py-3 px-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all"
               >
                 <MessageSquare className="w-4 h-4 text-emerald-400" />
-                <span>Order on WhatsApp</span>
+                <span>{language === 'ur' ? 'واٹس ایپ پر آرڈر کریں' : 'Order on WhatsApp'}</span>
               </a>
             </div>
 
@@ -320,9 +337,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-start gap-3 text-xs text-emerald-950">
             <Sparkles className="w-4 h-4 text-[#199b50] shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block">Need Hakeem advice before taking this?</span>
+              <span className="font-bold block">
+                {language === 'ur' ? 'استعمال سے پہلے طبیب سے رہنمائی درکار ہے؟' : 'Need Hakeem advice before taking this?'}
+              </span>
               <span className="text-emerald-800">
-                You can chat directly with our Unani Hakim on WhatsApp for tailored dosage according to your age and body temperament.
+                {language === 'ur'
+                  ? 'آپ اپنی عمر، کیفیت اور جسمانی مزاج کے مطابق صحیح خوراک معلوم کرنے کے لیے واٹس ایپ پر حکیم صاحب سے مفت رہنمائی لے سکتے ہیں۔'
+                  : 'You can chat directly with our Unani Hakim on WhatsApp for tailored dosage according to your age and body temperament.'}
               </span>
             </div>
           </div>
@@ -411,7 +432,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           {activeTab === 'ingredients' && (
             <div className="space-y-6">
               <p className="text-xs sm:text-sm text-stone-600">
-                Crafted using only 100% wildcrafted botanical roots, flowers, seeds, and classical Unani compounds.
+                {language === 'ur'
+                  ? 'خالص قدرتی جڑی بوٹیوں کی جڑوں، پتوں، بیجوں اور روایتی یونانی اصولوں کے عین مطابق تیار کردہ۔'
+                  : 'Crafted using only 100% wildcrafted botanical roots, flowers, seeds, and classical Unani compounds.'}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -421,9 +444,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                       {i + 1}
                     </div>
                     <div>
-                      <h5 className="font-bold text-xs sm:text-sm text-stone-900">{ing}</h5>
+                      <h5 className="font-bold text-xs sm:text-sm text-stone-900">
+                        {language === 'ur' ? (product.ingredientsUrdu[i] || ing) : ing}
+                      </h5>
                       <span className="text-[11px] text-[#199b50] font-medium">
-                        {product.ingredientsUrdu[i] || 'خالص جڑی بوٹی'}
+                        {language === 'ur' ? ing : (product.ingredientsUrdu[i] || 'خالص جڑی بوٹی')}
                       </span>
                     </div>
                   </div>
@@ -446,11 +471,23 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </div>
 
               <div className="space-y-3 text-xs sm:text-sm text-stone-600">
-                <h5 className="font-bold text-stone-900">Dietary Guidelines (Parhez):</h5>
+                <h5 className="font-bold text-stone-900">
+                  {language === 'ur' ? 'غذائی ہدایات و پرہیز:' : 'Dietary Guidelines (Parhez):'}
+                </h5>
                 <ul className="list-disc pl-5 space-y-1">
-                  <li>Avoid excessively sour, heavily fried, or processed commercial fast foods during treatment.</li>
-                  <li>Drink adequate lukewarm water and maintain regular sleep cycles.</li>
-                  <li>In case of ongoing allopathic medications, keep a 1-hour interval before taking herbal remedies.</li>
+                  {language === 'ur' ? (
+                    <>
+                      <li>دورانِ علاج کھٹی، بہت زیادہ تلی ہوئی اور مصنوعی بازاری اشیاء سے پرہیز کریں۔</li>
+                      <li>مناسب مقدار میں نیم گرم پانی پئیں اور نیند کا معمول درست رکھیں۔</li>
+                      <li>ایلوپیتھک ادویات کے ساتھ استعمال کی صورت میں کم از کم 1 گھنٹے کا وقفہ رکھیں۔</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>Avoid excessively sour, heavily fried, or processed commercial fast foods during treatment.</li>
+                      <li>Drink adequate lukewarm water and maintain regular sleep cycles.</li>
+                      <li>In case of ongoing allopathic medications, keep a 1-hour interval before taking herbal remedies.</li>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>
@@ -470,7 +507,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                         <span className="text-[11px] text-stone-500">({rev.city})</span>
                         {rev.verified && (
                           <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-[#155e42] px-2 py-0.2 rounded-full font-bold">
-                            <Check className="w-3 h-3" /> Verified Buyer
+                            <Check className="w-3 h-3" /> {language === 'ur' ? 'تصدیق شدہ خریدار' : 'Verified Buyer'}
                           </span>
                         )}
                       </div>
@@ -501,14 +538,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 {reviewSubmitted ? (
                   <div className="p-4 rounded-xl bg-emerald-50 text-[#155e42] text-xs font-bold flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Thank you! Your verified review has been submitted for moderation.</span>
+                    <span>
+                      {language === 'ur'
+                        ? 'شکریہ! آپ کی رائے موصول ہو چکی ہے اور جائزہ کے بعد شائع کر دی جائے گی۔'
+                        : 'Thank you! Your verified review has been submitted for moderation.'}
+                    </span>
                   </div>
                 ) : (
                   <form onSubmit={handleReviewSubmit} className="space-y-3 text-xs">
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         type="text"
-                        placeholder="Your Full Name"
+                        placeholder={language === 'ur' ? 'پورا نام' : 'Your Full Name'}
                         value={userReviewName}
                         onChange={(e) => setUserReviewName(e.target.value)}
                         required
@@ -516,7 +557,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                       />
                       <input
                         type="text"
-                        placeholder="Your City (e.g. Lahore, Karachi)"
+                        placeholder={language === 'ur' ? 'شہر (مثلاً: کراچی، لاہور)' : 'Your City (e.g. Lahore, Karachi)'}
                         value={userReviewCity}
                         onChange={(e) => setUserReviewCity(e.target.value)}
                         required
@@ -525,7 +566,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     </div>
 
                     <textarea
-                      placeholder="Share your health improvements, dosage results and feedback..."
+                      placeholder={
+                        language === 'ur'
+                          ? 'دوا کے اثرات، صحت میں بہتری اور اپنا تجربہ یہاں لکھیں...'
+                          : 'Share your health improvements, dosage results and feedback...'
+                      }
                       value={userReviewComment}
                       onChange={(e) => setUserReviewComment(e.target.value)}
                       rows={3}
@@ -535,9 +580,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
                     <button
                       type="submit"
-                      className="px-5 py-2.5 rounded-xl bg-[#0e2a1f] hover:bg-[#155e42] text-white font-bold transition-colors"
+                      className="px-5 py-2.5 rounded-xl bg-[#0e2a1f] hover:bg-[#158242] text-white font-bold transition-colors"
                     >
-                      Submit Review
+                      {language === 'ur' ? 'رائے جمع کروائیں' : 'Submit Review'}
                     </button>
                   </form>
                 )}
@@ -558,8 +603,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               {language === 'ur' ? 'متعلقہ دواخانہ ادویات' : 'Complementary House Remedies'}
             </h3>
             <Link href="/shop" className="text-xs font-bold text-[#155e42] hover:underline flex items-center gap-1">
-              <span>View All</span>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <span>{language === 'ur' ? 'تمام دیکھیں' : 'View All'}</span>
+              <ChevronRight className={`w-3.5 h-3.5 ${language === 'ur' ? 'rotate-180' : ''}`} />
             </Link>
           </div>
 
